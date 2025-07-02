@@ -1,0 +1,799 @@
+/*----------------------------------------*/
+/*  LARGE DESKTOP 1920px
+/*----------------------------------------*/
+
+/* Global scrollbar styling for consistency */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #155f37;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #0d3d23;
+}
+
+/* Firefox scrollbar styling */
+html {
+    scrollbar-width: thin;
+    scrollbar-color: #155f37 #f1f1f1;
+}
+
+/* Form Section Styles */
+.form-section {
+    border-left: 4px solid #155f37;
+    padding-left: 1rem;
+    margin-bottom: 2rem;
+}
+
+.section-title {
+    color: #155f37;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.password-requirements {
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+}
+
+.requirement {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.25rem;
+}
+
+.requirement i {
+    margin-right: 0.5rem;
+    width: 16px;
+}
+
+.requirement.valid {
+    color: #198754;
+}
+
+.requirement.invalid {
+    color: #dc3545;
+}
+
+/* Enhanced container height for forms */
+.form-container {
+    min-height: 100vh;
+    padding-top: 100px;
+    padding-bottom: 50px;
+}
+
+/* Register form specific height adjustments */
+.register-container {
+    min-height: calc(100vh + 200px);
+    padding-top: 120px;
+    padding-bottom: 80px;
+}
+
+@media (min-width: 1920px) {
+  .container {
+    width: 1230px;
+    max-width: 1230px;
+  }
+  .mainmenu ul#nav li:last-child {
+    margin-right: 0;
+  }
+  .mainmenu ul#nav li {
+    margin-right: 35px;
+  }
+}
+
+/*----------------------------------------*/
+/*  NORMAL DESKTOP 1201px - 1365px
+/*----------------------------------------*/
+
+@media (min-width: 1201px) and (max-width: 1365px) {
+  .mainmenu ul.sub-menu {
+    width: 250px;
+  }
+}
+
+/*----------------------------------------*/
+/*  NORMAL DESKTOP 992px - 1200px
+/*----------------------------------------*/
+
+@media (min-width: 992px) and (max-width: 1200px) {
+  .container {
+    width: 970px;
+    max-width: 970px;
+  }
+  .header-logo-menu.stick {
+    height: 55px;
+  }
+  .logo a img {
+    width: 100%;
+  }
+  .mainmenu-area {
+    float: right;
+    padding: 1px 0 0;
+  }
+  .mainmenu ul#nav li {
+    margin-right: 15px;
+  }
+  .login-form {
+    max-width: 100%;
+  }
+  .starting-area {
+    height: 35vh;
+  }
+  .class-content {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .single-class {
+    flex: 1 1 45%;
+  }
+  .class-des > p {
+    word-spacing: 1px;
+  }
+  .faq-area {
+    padding: 40px 20px;
+  }
+  .footer-info {
+    text-align: center;
+  }
+  .footer-logo {
+    max-width: 200px;
+  }
+  .filters-container {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .filter-dropdown,
+  .search-bar {
+    width: 45%;
+  }
+}
+
+/*----------------------------------------*/
+/*  TABLET DESKTOP 768px - 991px
+/*----------------------------------------*/
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .container {
+    width: 720px;
+    max-width: 720px;
+  }
+  .header-logo-menu.stick {
+    height: 50px;
+  }
+  .logo-img {
+    max-height: 50px;
+  }
+  .login-left {
+    width: 100%;
+    padding: 50px;
+  }
+  .login-right {
+    width: 100%;
+  }
+  .logo-image {
+    max-width: 130%;
+  }
+  .login-form {
+    max-width: 130%;
+  }
+  .math-verification {
+    gap: 5px;
+  }
+  .starting-area {
+    height: 30vh;
+  }
+  .starting-info h1 {
+    font-size: 40px;
+  }
+  .class-content {
+    flex-direction: column;
+    gap: 15px;
+  }
+  .single-class {
+    text-align: left;
+    padding: 15px;
+  }
+  .section-title h3 {
+    line-height: 30px;
+    font-size: 24px;
+  }
+  .class-area.class-column {
+    padding-top: 40px;
+  }
+  .class-des > p {
+    word-spacing: 0;
+  }
+  .faq-area {
+    padding: 30px 10px;
+  }
+  .section-title h3 {
+    font-size: 24px;
+  }
+  .section-title p {
+    font-size: 14px;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    align-items: center;
+  }
+  .filters-container {
+    flex-direction: column;
+  }
+  .filter-dropdown,
+  .search-bar {
+    width: 100%;
+  }
+}
+/*----------------------------------------*/
+/*  TABLET 481px - 767px
+/*----------------------------------------*/
+
+@media (min-width: 481px) and (max-width: 767px) {
+  .container {
+    width: 100%;
+    max-width: 100%;
+  }
+  .login-left {
+    width: 100%;
+  }
+  .login-form {
+    max-width: 95%;
+    margin: 30px auto;
+  }
+
+  .starting-area {
+    height: 30vh;
+  }
+  .starting-info h1 {
+    font-size: 35px;
+  }
+  .class-content {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .single-class {
+    text-align: left;
+    padding: 10px;
+  }
+  .section-title h3 {
+    line-height: 35px;
+    font-size: 30px;
+  }
+  .class-des > p {
+    word-spacing: 0;
+  }
+  .class-area.class-column {
+    padding-top: 40px;
+  }
+  .faq-area {
+    padding: 20px 5px;
+  }
+  .footer-info > span {
+    line-height: 25px;
+  }
+  .footer-container span {
+    display: block;
+    text-align: center;
+  }
+  .footer-container .social-links {
+    display: block;
+    float: none;
+    margin-top: 10px;
+    text-align: center;
+  }
+  .footer-container .social-links a:first-child {
+    margin-left: 0;
+  }
+  .social-links {
+    margin-left: 0;
+    margin-top: 6px;
+  }
+}
+
+/*----------------------------------------*/
+/*  LARGE MOBILE 425px
+/*----------------------------------------*/
+
+@media (max-width: 480px) {
+  .container {
+    width: 100%;
+    max-width: 100%;
+  }
+  .mobile-menu-area {
+    display: block;
+  }
+  .login-left {
+    width: 100%;
+    padding: 50px;
+  }
+  .logo-image {
+    margin-top: 50px;
+    max-width: 100%;
+  }
+  .login-container {
+    flex-direction: column;
+  }
+  .login-form {
+    max-width: 90%;
+    margin: 30px auto;
+    margin-top: -50px;
+  }
+  .starting-area {
+    height: 30vh;
+  }
+  .starting-info h1 {
+    font-size: 35px;
+  }
+  .class-content {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .single-class {
+    text-align: left;
+    padding: 10px;
+  }
+  .section-title h3 {
+    line-height: 35px;
+    font-size: 30px;
+  }
+  .class-des > p {
+    word-spacing: 0;
+  }
+  .class-area.class-column {
+    padding-top: 40px;
+  }
+  .faq-area {
+    padding: 20px 5px;
+  }
+  .footer-info > span {
+    line-height: 25px;
+  }
+  .footer-container span {
+    display: block;
+    text-align: center;
+  }
+  .footer-container .social-links {
+    display: block;
+    float: none;
+    margin-top: 10px;
+    text-align: center;
+  }
+  .footer-container .social-links a:first-child {
+    margin-left: 0;
+  }
+  .social-links {
+    margin-left: 0;
+    margin-top: 6px;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+
+/*----------------------------------------*/
+/*  MEDIUM MOBILE 375px
+/*----------------------------------------*/
+
+@media (max-width: 375px) {
+  .container {
+    width: 100%;
+    max-width: 100%;
+  }
+  .navbar-toggler {
+    position: absolute;
+    top: 27px;
+    right: 18px;
+  }
+  .navbar-collapse {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    margin-top: 30px;
+    width: 100%;
+    background-color: #044128;
+    z-index: 9999;
+  }
+  .navbar-nav {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  .navbar-nav .nav-item {
+    width: 100%;
+  }
+  .navbar-nav .nav-link {
+    width: 100%;
+    text-align: left;
+    padding: 10px 20px;
+  }
+  .navbar-nav .dropdown-menu {
+    position: static;
+    float: none;
+    width: 100%;
+    margin-top: 0;
+    background-color: #044128;
+  }
+  .navbar-nav .dropdown-item {
+    text-align: left;
+    padding: 10px 20px;
+  }
+  .logo-image {
+    max-width: 100%;
+    padding: 10px;
+  }
+  .login-form {
+    max-width: 90%;
+    max-height: 100%;
+    margin: 30px auto;
+    margin-top: -50px;
+  }
+}
+
+/*----------------------------------------*/
+/*  SMALL MOBILE 320px
+/*----------------------------------------*/
+
+@media (max-width: 320px) {
+  .container {
+    width: 100%;
+    max-width: 100%;
+  }
+  .navbar-toggler {
+    position: absolute;
+    top: 25px;
+    right: 10px;
+  }
+  .navbar-collapse {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    margin-top: 30px;
+    width: 100%;
+    background-color: #044128;
+    z-index: 9999;
+  }
+  .navbar-nav {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  .navbar-nav .nav-item {
+    width: 100%;
+  }
+  .navbar-nav .nav-link {
+    width: 100%;
+    text-align: left;
+    padding: 10px 20px;
+  }
+  .navbar-nav .dropdown-menu {
+    position: static;
+    float: none;
+    width: 100%;
+    margin-top: 0;
+    background-color: #044128;
+  }
+  .navbar-nav .dropdown-item {
+    text-align: left;
+    padding: 10px 20px;
+  }
+  .login-container{
+    width: 100%;
+    height: 150%;
+  }
+  .login-left {
+    width: 0px;
+  }
+  .login-form {
+    max-width: 90%;
+
+  }
+  .starting-area {
+    height: 40vh;
+  }
+  .starting-info h1 {
+    font-size: 25px;
+  }
+  .class-content {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .single-class {
+    text-align: left;
+    padding: 10px;
+  }
+  .section-title h3 {
+    line-height: 24px;
+    font-size: 20px;
+  }
+  .faq-area {
+    padding: 20px 5px;
+  }
+  .footer-logo {
+    max-width: 250px;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/*----------------------------------------*/
+/*  MOBILE AND SMALL DEVICES - 576px and below
+/*----------------------------------------*/
+@media (max-width: 576px) {
+    .container {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .card {
+        margin: 0 5px;
+        border-radius: 8px !important;
+    }
+
+    .card-body {
+        padding: 1.5rem !important;
+    }
+
+    .form-section {
+        border-left: 3px solid #155f37;
+        padding-left: 0.75rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+        font-size: 1rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .form-label {
+        font-size: 0.9rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .form-control {
+        font-size: 0.9rem;
+        padding: 0.5rem 0.75rem;
+    }
+
+    .btn-lg {
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+    }
+
+    .password-requirements {
+        font-size: 0.8rem;
+        padding: 0.75rem !important;
+    }
+
+    .requirement {
+        margin-bottom: 0.2rem;
+    }
+
+    .requirement span {
+        font-size: 0.8rem;
+    }
+
+    .input-group .btn {
+        padding: 0.5rem 0.75rem;
+    }
+
+    h3 {
+        font-size: 1.5rem;
+    }
+
+    .text-center.mb-4 p {
+        font-size: 0.9rem;
+    }
+
+    /* Register page specific adjustments */
+    .col-12.col-lg-8.col-xl-7 {
+        max-width: 100%;
+        padding: 0 10px;
+    }
+
+    /* Change password page specific adjustments */
+    .col-12.col-lg-6.col-xl-5 {
+        max-width: 100%;
+        padding: 0 10px;
+    }
+
+    /* Enhanced container height for mobile */
+    .form-container {
+        min-height: calc(100vh + 100px);
+        padding-top: 80px;
+    }
+
+    .register-container {
+        min-height: calc(100vh + 300px);
+        padding-top: 100px;
+        padding-bottom: 100px;
+    }
+}
+
+/*----------------------------------------*/
+/*  TABLET AND MEDIUM DEVICES - 768px and below
+/*----------------------------------------*/
+@media (max-width: 768px) {
+    .col-12.col-lg-8.col-xl-7 {
+        max-width: 100%;
+        padding: 0 10px;
+    }
+
+    .col-12.col-lg-6.col-xl-5 {
+        max-width: 100%;
+        padding: 0 10px;
+    }
+
+    .py-4 {
+        padding-top: 2rem !important;
+        padding-bottom: 2rem !important;
+    }
+
+    .form-check-label {
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+
+    .modal-dialog {
+        margin: 0.5rem;
+    }
+
+    .modal-lg {
+        max-width: 95%;
+    }
+
+    .btn.py-2 {
+        padding: 0.5rem 1rem !important;
+        font-size: 0.9rem;
+    }
+}
+
+/*----------------------------------------*/
+/*  LARGE TABLET AND DESKTOP - 992px and below
+/*----------------------------------------*/
+@media (max-width: 992px) {
+    .container {
+        max-width: 100%;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .row.g-3 .col-md-6 {
+        margin-bottom: 1rem;
+    }
+}
+
+/*----------------------------------------*/
+/*  LANDSCAPE MOBILE ORIENTATION
+/*----------------------------------------*/
+@media (max-width: 896px) and (orientation: landscape) {
+    .py-4 {
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
+    }
+
+    .text-center.mb-4 {
+        margin-bottom: 1rem !important;
+    }
+
+    .form-section {
+        margin-bottom: 1rem;
+    }
+
+    .form-container {
+        min-height: calc(100vh + 50px);
+        padding-top: 60px;
+    }
+
+    .register-container {
+        min-height: calc(100vh + 150px);
+        padding-top: 80px;
+        padding-bottom: 60px;
+    }
+}
+
+/*----------------------------------------*/
+/*  VERY SMALL DEVICES - 320px and below
+/*----------------------------------------*/
+@media (max-width: 320px) {
+    .card-body {
+        padding: 1rem !important;
+    }
+
+    .form-section {
+        padding-left: 0.5rem;
+    }
+
+    .btn-lg {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.9rem;
+    }
+
+    .input-group .btn {
+        padding: 0.4rem 0.6rem;
+    }
+
+    .input-group .btn i {
+        font-size: 0.8rem;
+    }
+}
+
+/*----------------------------------------*/
+/*  TABLET STYLES - 768px to 1024px
+/*----------------------------------------*/
+@media (min-width: 768px) and (max-width: 1024px) {
+    .col-12.col-lg-8.col-xl-7 {
+        max-width: 85%;
+    }
+
+    .col-12.col-lg-6.col-xl-5 {
+        max-width: 70%;
+    }
+}
+
+/*----------------------------------------*/
+/*  LARGE TABLETS AND SMALL DESKTOPS - 1024px to 1366px
+/*----------------------------------------*/
+@media (min-width: 1024px) and (max-width: 1366px) {
+    .col-12.col-lg-8.col-xl-7 {
+        max-width: 75%;
+    }
+
+    .col-12.col-lg-6.col-xl-5 {
+        max-width: 60%;
+    }
+}
+
+/*----------------------------------------*/
+/*  TOUCH DEVICE IMPROVEMENTS
+/*----------------------------------------*/
+@media (hover: none) and (pointer: coarse) {
+    .btn, .form-control, .form-check-input {
+        min-height: 44px;
+    }
+
+    .input-group .btn {
+        min-width: 44px;
+    }
+
+    a[data-bs-toggle="modal"] {
+        padding: 0.25rem;
+        margin: 0.125rem;
+    }
+}
+
+/*----------------------------------------*/
+/*  ULTRA-WIDE SCREENS - 1400px and above
+/*----------------------------------------*/
+@media (min-width: 1400px) {
+    .col-12.col-lg-8.col-xl-7 {
+        max-width: 50%;
+    }
+
+    .col-12.col-lg-6.col-xl-5 {
+        max-width: 40%;
+    }
+}
+
+/*----------------------------------------*/
+/*  HIGH DPI SCREENS
+/*----------------------------------------*/
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .card {
+        box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.15) !important;
+    }
+}

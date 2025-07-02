@@ -1,0 +1,782 @@
+/*
+ * Table styling for GIYA application
+ * This file provides consistent table styling across all pages in the GIYA application
+ */
+
+/* Card styling for tables - the outer container */
+.card.shadow-sm.border-0.student-table-container,
+.card.shadow-sm.border-0 {
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.075) !important;
+    margin-bottom: 2rem;
+}
+
+/* Card header styling */
+.card-header.bg-white.py-3,
+.card-header.bg-white,
+.card-header {
+    background-color: #fff !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    padding: 1rem 1.25rem !important;
+}
+
+.card-header h5.mb-0,
+.card-header .card-title {
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 0;
+}
+
+/* Table styling - Universal for all tables */
+.table.table-hover.border-0,
+.table.table-hover,
+.dataTable {
+    margin-bottom: 0;
+}
+
+.table.table-hover.border-0 thead.table-light th,
+table.dataTable thead th,
+.dataTable thead th {
+    background-color: #155f37 !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    padding: 0.75rem 1rem;
+    color: white !important;
+}
+
+.table.table-hover.border-0 tbody td,
+.table.table-hover tbody td,
+.dataTable tbody td {
+    padding: 0.75rem 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    color: #212529;
+}
+
+.table.table-hover.border-0 tbody tr:hover,
+.table-hover tbody tr:hover,
+.dataTable tbody tr:hover {
+    background-color: rgba(21, 95, 55, 0.05) !important;
+}
+
+/* Status badges - Unified styling */
+.table .badge,
+.badge {
+    font-weight: 400;
+    padding: 0.35rem 0.65rem;
+    border-radius: 0.25rem;
+}
+
+/* Solid button and badge styling */
+.btn-solid-primary,
+.badge.btn-solid-primary {
+    background-color: #155f37;
+    border-color: #155f37;
+    color: white;
+}
+
+.btn-solid-warning,
+.badge.btn-solid-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #212529;
+}
+
+.btn-solid-danger,
+.badge.btn-solid-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+}
+
+.btn-solid-success,
+.badge.btn-solid-success {
+    background-color: #28a745;
+    border-color: #28a745;
+    color: white;
+}
+
+.btn-solid-info,
+.badge.btn-solid-info {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+    color: white;
+}
+
+/* Button hover effects */
+.btn-solid-primary:hover {
+    background-color: #0f4728;
+    border-color: #0f4728;
+}
+
+.btn-solid-warning:hover {
+    background-color: #e0a800;
+    border-color: #e0a800;
+}
+
+.btn-solid-danger:hover {
+    background-color: #bd2130;
+    border-color: #bd2130;
+}
+
+.btn-solid-success:hover {
+    background-color: #218838;
+    border-color: #218838;
+}
+
+/* DataTables specific styling - CONSISTENT ACROSS ALL TABLES */
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+    background: #155f37 !important;
+    border-color: #155f37 !important;
+    color: white !important;
+    border-radius: 0.25rem !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:not(.current):hover {
+    background: #f8f9fa !important;
+    border-color: #dee2e6 !important;
+    color: #155f37 !important;
+}
+
+/* Ensure search fields match the design */
+.dataTables_wrapper .dataTables_filter input {
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    padding: 0.375rem 0.75rem;
+    margin-left: 0.5rem;
+}
+
+/* Consistent pagination styling across all tables */
+.dataTables_paginate .pagination {
+    --bs-pagination-border-color: transparent !important;
+    margin-top: 1rem !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+}
+
+.page-item.active .page-link {
+    background-color: #155f37 !important;
+    border-color: #155f37 !important;
+    color: white !important;
+}
+
+.page-item .page-link {
+    color: #155f37;
+    border: none;
+    padding: 0.5rem 1rem;
+    margin: 0 0.2rem;
+}
+
+.page-item .page-link {
+    color: #155f37 !important;
+    border: none !important;
+    padding: 0.5rem 1rem !important;
+    margin: 0 0.2rem !important;
+}
+
+.page-item.active .page-link {
+    background-color: #155f37 !important;
+    border-color: #155f37 !important;
+    color: white !important;
+}
+
+/* Length menu styling */
+.dataTables_length select {
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    padding: 0.375rem 0.75rem;
+}
+
+/* Info text styling */
+.dataTables_info {
+    color: #6c757d;
+}
+
+/* Make pagination buttons more attractive */
+.dataTables_paginate {
+    margin-top: 0.75rem !important;
+}
+
+.dataTables_paginate .page-link {
+    border-radius: 0.25rem !important;
+}
+
+/* Fix the spacing in wrapper to be consistent */
+.dataTables_wrapper .row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+/* Ensure consistent action button styling */
+.btn-action {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    border-radius: 0.2rem;
+}
+
+/* Apply cursor: pointer to all clickable rows */
+.cursor-pointer,
+.table-hover tbody tr {
+    cursor: pointer;
+}
+
+/* Fix any non-standard button sizes or appearance */
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    border-radius: 0.2rem;
+}
+
+/* Eliminate any custom table width classes that might cause inconsistencies */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* Make paginate buttons consistent with solid buttons */
+.page-item.active .page-link {
+    background-color: #155f37 !important;
+    border-color: #155f37 !important;
+}
+
+/* Make sure DOM structure rows have consistent spacing */
+.dataTables_wrapper .row + .row {
+    margin-top: 1rem;
+}
+
+/* Add specific fixes for master tables */
+#studentsTable_wrapper .dataTables_paginate,
+#coursesTable_wrapper .dataTables_paginate,
+#departmentsTable_wrapper .dataTables_paginate {
+    margin-top: 1rem !important;
+}
+
+#studentsTable_wrapper .pagination .page-item .page-link,
+#coursesTable_wrapper .pagination .page-item .page-link,
+#departmentsTable_wrapper .pagination .page-item .page-link {
+    padding: 0.5rem 1rem !important;
+    border: none !important;
+    margin: 0 0.2rem !important;
+}
+
+/* Fix specifically for master-students pagination */
+#studentsTable_wrapper .pagination {
+    --bs-pagination-border-color: transparent !important;
+}
+
+/* CRITICAL PAGINATION STYLING - THIS MUST BE APPLIED TO ALL TABLES */
+/* This section has higher specificity to override DataTables defaults */
+.dataTables_wrapper .dataTables_paginate .paginate_button,
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .pagination {
+    --bs-pagination-border-color: transparent !important;
+    margin-top: 1rem !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .pagination .page-item .page-link {
+    border: none !important;
+    padding: 0.5rem 1rem !important;
+    margin: 0 0.2rem !important;
+    color: #155f37 !important;
+    background-color: transparent !important;
+    border-radius: 0.25rem !important;
+}
+
+.dataTables_wrapper
+    .dataTables_paginate
+    .pagination
+    .page-item.active
+    .page-link {
+    background-color: #155f37 !important;
+    border-color: #155f37 !important;
+    color: white !important;
+}
+
+.dataTables_wrapper
+    .dataTables_paginate
+    .pagination
+    .page-item:not(.active)
+    .page-link:hover {
+    background-color: rgba(21, 95, 55, 0.05) !important;
+    color: #155f37 !important;
+}
+
+/* Add a class that can be added with JavaScript */
+.giya-pagination-fixed {
+    margin-top: 1rem !important;
+    padding-top: 0.5rem !important;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.giya-pagination-fixed .pagination {
+    margin-bottom: 0 !important;
+}
+
+/* Add this style to your existing table-styles.css to enhance the search box */
+
+/* Search input styling */
+.dataTables_filter input {
+    padding-right: 30px;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    border-color: #80bdff;
+    border-radius: 4px;
+    margin-left: 0.5em;
+    background-size: 16px;
+    background-position: right 10px center;
+    background-repeat: no-repeat;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23b0b0b0' class='bi bi-search' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'%3E%3C/path%3E");
+}
+
+.form-control-search:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.dataTables_filter label {
+    margin-bottom: 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+/* Add these styles to enhance the status toggle switch */
+
+/* Search input styling */
+.dataTables_filter input {
+    padding-right: 30px;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    background-size: 16px;
+    background-position: right 10px center;
+    background-repeat: no-repeat;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23b0b0b0' class='bi bi-search' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'%3E%3C/path%3E");
+}
+
+/* Styles for tables in GIYA admin dashboard */
+
+/* Hide the department column by default */
+.department-column {
+    display: none;
+}
+
+/* Show department column for POC users (added via JS) */
+.department-column.show {
+    display: table-cell;
+}
+
+/* Add spacing to status badges */
+.status-badge {
+    padding: 0.4rem 0.65rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.025rem;
+}
+
+/* Custom styles for DataTables */
+.dataTables_wrapper .dataTables_filter input {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 6px 10px;
+    padding: 0.35rem 0.6rem;
+    font-size: 0.85rem;
+}
+
+.department-filter-indicator {
+    /* Department filter indicator */
+    padding: 5px 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+.dataTables_wrapper .dataTables_length select {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 6px 10px;
+}
+
+/* Page Number Input Styling */
+.page-number-input-container {
+    display: flex;
+    align-items: center;
+    margin: 0 5px;
+}
+
+.page-number-input {
+    width: 50px;
+    height: 32px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    text-align: center;
+    padding: 0.25rem;
+    font-size: 14px;
+    background-color: #fff;
+}
+
+.page-number-input:focus {
+    outline: none;
+    border-color: #155f37;
+    box-shadow: 0 0 0 0.2rem rgba(21, 95, 55, 0.25);
+}
+
+/* Discord-style pagination - add input styling */
+.discord-pagination .page-number-input-container {
+    display: flex;
+    align-items: center;
+    margin: 0 4px;
+}
+
+.discord-pagination .page-number-input {
+    background-color: #fff;
+    border: none;
+    border-radius: 4px;
+    height: 32px;
+    width: 48px;
+    text-align: center;
+    font-size: 14px;
+    color: #4e5058;
+    font-weight: 500;
+}
+
+.discord-pagination .page-number-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(21, 95, 55, 0.25);
+}
+
+/* Page Number Input Styling - Enhanced */
+.page-number-input-container {
+    display: flex !important;
+    align-items: center !important;
+    margin: 0 5px !important;
+    position: relative !important;
+    z-index: 10 !important;
+}
+
+.page-number-input {
+    width: 50px !important;
+    height: 32px !important;
+    border: 1px solid #dee2e6 !important;
+    border-radius: 4px !important;
+    text-align: center !important;
+    padding: 0.25rem !important;
+    font-size: 14px !important;
+    background-color: #fff !important;
+    display: block !important;
+}
+
+.page-number-input:focus {
+    outline: none !important;
+    border-color: #155f37 !important;
+    box-shadow: 0 0 0 0.2rem rgba(21, 95, 55, 0.25) !important;
+}
+
+/* Discord-style pagination - improved input styling */
+.discord-pagination .page-number-input-container {
+    display: flex !important;
+    align-items: center !important;
+    margin: 0 4px !important;
+}
+
+.discord-pagination .page-number-input {
+    background-color: #fff !important;
+    border: 1px solid #dee2e6 !important;
+    border-radius: 4px !important;
+    height: 32px !important;
+    width: 48px !important;
+    text-align: center !important;
+    font-size: 14px !important;
+    color: #4e5058 !important;
+    font-weight: 500 !important;
+    appearance: textfield !important;
+}
+
+.discord-pagination .page-number-input::-webkit-inner-spin-button,
+.discord-pagination .page-number-input::-webkit-outer-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
+}
+
+.discord-pagination .page-number-input:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 2px rgba(21, 95, 55, 0.25) !important;
+    border-color: #155f37 !important;
+}
+
+/* Critical page number input styles - high specificity to ensure they take effect */
+div.page-number-input-container {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 4px !important;
+    min-width: 50px !important;
+    min-height: 32px !important;
+    position: relative !important;
+    z-index: 100 !important;
+}
+
+input.page-number-input {
+    width: 50px !important;
+    height: 32px !important;
+    border: 1px solid #dee2e6 !important;
+    border-radius: 4px !important;
+    text-align: center !important;
+    padding: 4px !important;
+    margin: 0 !important;
+    font-size: 14px !important;
+    display: block !important;
+    appearance: textfield !important;
+    -moz-appearance: textfield !important;
+    -webkit-appearance: textfield !important;
+}
+
+input.page-number-input::-webkit-inner-spin-button,
+input.page-number-input::-webkit-outer-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
+}
+
+.dataTables_paginate .pagination {
+    display: flex !important;
+    align-items: center !important;
+}
+
+/* Make sure the pagination container has sufficient height for the input */
+.dataTables_paginate {
+    min-height: 40px !important;
+}
+
+/* Page Number Input - Completely Revised for Better Visibility */
+.dataTables_paginate {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    min-height: 38px !important;
+}
+
+.dataTables_paginate .pagination {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+}
+
+/* Override specificity issues */
+.page-number-input-container,
+div.page-number-input-container,
+span.page-number-input-container {
+    display: inline-flex !important;
+    align-items: center !important;
+    margin: 0 8px !important;
+    padding: 0 !important;
+    border: none !important;
+    position: relative !important;
+    z-index: 5 !important;
+    min-width: 60px !important;
+    height: 32px !important;
+    background: transparent !important;
+}
+
+.page-number-input-container::before {
+    content: "Page" !important;
+    display: inline-block !important;
+    margin-right: 4px !important;
+    font-size: 13px !important;
+    color: #444 !important;
+}
+
+.page-number-input,
+input.page-number-input {
+    width: 50px !important;
+    height: 32px !important;
+    padding: 4px 8px !important;
+    text-align: center !important;
+    border: 1px solid #dee2e6 !important;
+    border-radius: 4px !important;
+    font-size: 14px !important;
+    color: #212529 !important;
+    appearance: textfield !important;
+    -moz-appearance: textfield !important;
+    -webkit-appearance: textfield !important;
+    display: inline-block !important;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075) !important;
+    background-color: white !important;
+    margin: 0 !important;
+}
+
+.page-number-input::-webkit-inner-spin-button,
+.page-number-input::-webkit-outer-spin-button,
+input.page-number-input::-webkit-inner-spin-button,
+input.page-number-input::-webkit-outer-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
+}
+
+.page-number-input:focus {
+    border-color: #155f37 !important;
+    box-shadow: 0 0 0 0.2rem rgba(21, 95, 55, 0.25) !important;
+    outline: none !important;
+}
+
+/* Enhanced Page Number Input Styling - Fixed Position and Visibility */
+.dataTables_paginate {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+}
+
+.page-number-input-container {
+    display: flex !important;
+    align-items: center !important;
+    margin-right: 10px !important; /* Space between input and pagination */
+    min-width: 150px !important;
+}
+
+.page-number-input-container .input-group-text {
+    background-color: #f8f9fa !important;
+    border-color: #dee2e6 !important;
+    color: #495057 !important;
+    font-size: 0.85rem !important;
+}
+
+.page-number-input {
+    width: 60px !important;
+    text-align: center !important;
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.875rem !important;
+    line-height: 1.5 !important;
+}
+
+/* Make sure pagination itself doesn't get hidden */
+.dataTables_wrapper .dataTables_paginate {
+    float: none !important;
+    display: flex !important;
+    width: 100% !important;
+    overflow: visible !important;
+}
+
+/* Fixes for potential overflow issues */
+.row:has(.dataTables_paginate) {
+    overflow: visible !important;
+}
+
+/* Make sure our row containing pagination doesn't get hidden */
+.dataTables_wrapper > .row:last-child {
+    overflow: visible !important;
+    position: relative !important;
+    z-index: 5 !important;
+}
+
+/* Forward button styling */
+#forwardPostBtn {
+    display: flex;
+    align-items: center;
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+}
+
+#forwardPostBtn .bi {
+    margin-right: 0.25rem;
+}
+
+#forwardPostBtn.disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Table Styling */
+table.dataTable {
+    border-collapse: collapse !important;
+    border: none !important;
+}
+
+table.dataTable thead th {
+    border-bottom: none !important;
+    background-color: #155f37 !important;
+    color: white !important;
+    text-align: left !important;
+}
+
+table.dataTable thead th.sorting:after,
+table.dataTable thead th.sorting_asc:after,
+table.dataTable thead th.sorting_desc:after {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+table.dataTable tbody tr:hover {
+    background-color: rgba(21, 95, 55, 0.05) !important;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #155f37 !important;
+    border-color: #155f37 !important;
+}
+
+.pagination .page-link {
+    color: #155f37;
+}
+
+.pagination .page-link:hover {
+    color: #0d3d23;
+}
+
+/* Status badges */
+.btn-solid-primary,
+.badge-primary {
+    background-color: #155f37 !important;
+    color: white !important;
+    border-color: #155f37 !important;
+}
+
+.btn-solid-danger,
+.badge-danger {
+    background-color: #dc3545 !important;
+    color: white !important;
+    border-color: #dc3545 !important;
+}
+
+.btn-solid-warning,
+.badge-warning {
+    background-color: #ffc107 !important;
+    color: #212529 !important;
+    border-color: #ffc107 !important;
+}
+
+/* Filter styling */
+.filter-container {
+    margin-bottom: 1.5rem;
+}
+
+.filter-lock-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+}
+
+.locked-filter .form-select {
+    background-color: rgba(0, 0, 0, 0.03);
+    cursor: not-allowed;
+}
+
+.locked-filter label::after {
+    content: " (Locked)";
+    color: #6c757d;
+    font-size: 0.85em;
+    font-style: italic;
+}
