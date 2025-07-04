@@ -120,44 +120,42 @@
     <div class="modal fade" id="postDetailsModal" tabindex="-1">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header border-bottom-0">
-                    <div>
-                        <div class="d-flex align-items-center">
-                            <i class="bi bi-person-circle fs-3 me-2"></i>
-                            <div>
-                                <div class="d-flex align-items-center gap-2">
-                                    <h5 class="modal-title mb-0" id="postUserName"></h5>
-                                    <span class="badge" id="postStatusBadge"></span>
-                                </div>
-                                <small class="text-muted" id="postUserId"></small>
-                                <div class="mt-2">
-                                    <button type="button" class="btn btn-sm btn-outline-primary" id="forwardPostBtn"
-                                        style="display:none;">
-                                        <i class="bi bi-send"></i> Forward
-                                    </button>
-                                </div>
+                <div class="modal-header border-bottom-0 bg-white">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-person-circle fs-3 me-3 text-primary"></i>
+                        <div class="flex-grow-1">
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <h5 class="modal-title mb-0 fw-semibold" id="postUserName"></h5>
+                                <span class="badge rounded-pill" id="postStatusBadge"></span>
+                            </div>
+                            <small class="text-muted" id="postUserId"></small>
+                            <div class="mt-2">
+                                <button type="button" class="btn btn-sm btn-outline-primary rounded-pill" id="forwardPostBtn"
+                                    style="display:none;">
+                                    <i class="bi bi-send me-1"></i> Forward
+                                </button>
                             </div>
                         </div>
                     </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div id="forwardInfo" class="px-3" style="display:none;"></div>
                 <div class="modal-body p-0">
                     <div class="chat-container">
                         <!-- Main post content -->
-                        <div class="main-post p-3 border-bottom"></div>
+                        <div class="main-post p-3 border-bottom bg-light"></div>
                         <!-- Replies container -->
-                        <div class="replies-container p-3" style="height: 300px; overflow-y: auto;"></div>
+                        <div class="replies-container p-3" style="max-height: 400px; overflow-y: auto; background-color: #f8f9fa;"></div>
                     </div>
                 </div>
-                <div class="reply-form-container p-3 border-top bg-light">
+                <div class="reply-form-container p-3 border-top bg-white shadow-sm">
                     <form id="replyForm" class="reply-form">
-                        <div class="input-group">
-                            <button class="btn btn-outline-secondary" type="button" id="attachButton">
+                        <div class="input-group rounded-pill overflow-hidden border">
+                            <button class="btn btn-outline-secondary border-0" type="button" id="attachButton">
                                 <i class="bi bi-paperclip"></i>
                             </button>
                             <input type="file" id="attachFile" style="display: none;">
-                            <input type="text" class="form-control reply-input" placeholder="Write a reply...">
+                            <input type="text" class="form-control border-0 reply-input" placeholder="Write a reply..." style="box-shadow: none;">
                             <button class="btn btn-primary" type="submit">
                                 <i class="bi bi-send-fill"></i>
                             </button>

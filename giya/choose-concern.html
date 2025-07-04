@@ -68,7 +68,7 @@
     </div>
 
     <!-- Inquiry Status Modal -->
-    <div class="modal fade" id="inquiryStatusModal" tabindex="-1">
+    <div class="modal fade" id="inquiryStatusModal" tabindex="-1" aria-labelledby="inquiryStatusModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header" style="background-color: #155f37; color: white;">
@@ -119,29 +119,29 @@
     </div>
 
     <!-- Submission Detail Modal -->
-    <div class="modal fade" id="submissionDetailModal" tabindex="-1">
+    <div class="modal fade" id="submissionDetailModal" tabindex="-1" aria-labelledby="submissionDetailModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header border-bottom-0">
+                <div class="modal-header border-bottom-0 bg-white">
                     <div class="d-flex align-items-center">
-                        <i class="bi bi-person-circle fs-3 me-2"></i>
-                        <div>
-                            <div class="d-flex align-items-center gap-2">
-                                <h5 class="modal-title mb-0" id="postUserName"></h5>
-                                <span class="badge" id="postStatus"></span>
+                        <i class="bi bi-person-circle fs-3 me-3 text-primary"></i>
+                        <div class="flex-grow-1">
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <h5 class="modal-title mb-0 fw-semibold" id="postUserName">User Name</h5>
+                                <span class="badge rounded-pill bg-secondary" id="postStatus">Status</span>
                             </div>
-                            <small class="text-muted" id="postUserId"></small>
+                            <small class="text-muted" id="postUserId">User ID</small>
                         </div>
                     </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-0">
                     <div class="chat-container">
                         <!-- Combined replies container to include both original post and replies -->
-                        <div class="replies-container p-3" style="max-height: 450px">
+                        <div class="replies-container p-3" style="max-height: 400px; overflow-y: auto; background-color: #f8f9fa;">
                             <!-- Original post and replies will be inserted here dynamically -->
                         </div>
-                        <div id="replyFormContainer" class="p-3 border-top bg-light">
+                        <div id="replyFormContainer" class="p-3 border-top bg-white shadow-sm">
                             <!-- Reply form will be loaded dynamically -->
                         </div>
                     </div>
@@ -296,6 +296,7 @@
     <script src="js/toastr-config.js"></script>
     <script src="js/auth-helper.js"></script>
     <script src="js/choose-concern.js"></script>
+    <script src="js/modal-consistency.js"></script>
 </body>
 
 </html>

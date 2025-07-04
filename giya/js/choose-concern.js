@@ -13,9 +13,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('userFirstName').textContent = auth.firstName;
 
-    const inquiryStatusModal = new bootstrap.Modal(document.getElementById('inquiryStatusModal'));
-    const submissionDetailModal = new bootstrap.Modal(document.getElementById('submissionDetailModal'));
-    const privacyModal = new bootstrap.Modal(document.getElementById('privacyModal'));
+    // Check if modal elements exist
+    const inquiryStatusModalElement = document.getElementById('inquiryStatusModal');
+    const submissionDetailModalElement = document.getElementById('submissionDetailModal');
+    const privacyModalElement = document.getElementById('privacyModal');
+
+    if (!inquiryStatusModalElement || !submissionDetailModalElement || !privacyModalElement) {
+        return;
+    }
+
+    const inquiryStatusModal = new bootstrap.Modal(inquiryStatusModalElement);
+    const privacyModal = new bootstrap.Modal(privacyModalElement);
+    const submissionDetailModal = new bootstrap.Modal(submissionDetailModalElement);
 
     let currentSubmissionId = null;
 
@@ -135,6 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const row = document.createElement('tr');
             row.className = 'submission-row';
             row.dataset.id = submission.post_id;
+            row.style.cursor = 'pointer';
 
             row.innerHTML = `
                 <td>#${submission.post_id}</td>
@@ -145,7 +155,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${formatDate(submission.post_date)}</td>
             `;
 
-            row.addEventListener('click', () => {
+            row.addEventListener('click', (e) => {
+                // Add visual feedback
+                row.style.backgroundColor = '#e3f2fd';
+                setTimeout(() => {
+                    row.style.backgroundColor = '';
+                }, 200);
+
+                // Prevent any default behavior
+                e.preventDefault();
+                e.stopPropagation();
+
                 loadSubmissionDetails(submission.post_id);
             });
 
@@ -180,8 +200,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentSubmissionId = submissionId;
                 const post = response.data.post;
 
-                if (bootstrap.Modal.getInstance(document.getElementById('inquiryStatusModal'))) {
-                    bootstrap.Modal.getInstance(document.getElementById('inquiryStatusModal')).hide();
+                if (bootstrap.Modal.getInstance(inquiryStatusModalElement)) {
+                    bootstrap.Modal.getInstance(inquiryStatusModalElement).hide();
+                }
+
+                if (!submissionDetailModalElement) {
+                    return;
                 }
 
                 submissionDetailModal.show();
@@ -502,7 +526,6 @@ document.addEventListener('DOMContentLoaded', () => {
         new bootstrap.Dropdown(dropdown);
     });
 
-    const privacyModalElement = document.getElementById('privacyModal');
     const privacyContent = document.getElementById('privacyContent');
     const acceptBtn = document.getElementById('acceptPrivacyBtn');
 
@@ -558,7 +581,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }, 1500);
                 } else {
                     setTimeout(() => {
-                        bootstrap.Modal.getInstance(document.getElementById('privacyModal')).hide();
+                        privacyModal.hide();
                     }, 1500);
                 }
             } else {

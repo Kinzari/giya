@@ -210,6 +210,203 @@ button.sidebar-toggle {
     padding: 1rem 1.5rem;
 }
 
+/* Enhanced Post Details Modal Styling - Consistent across Admin & User sides */
+#postDetailsModal .modal-content,
+#submissionDetailModal .modal-content {
+    border: none;
+    border-radius: 1rem;
+    box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.15);
+}
+
+#postDetailsModal .modal-header,
+#submissionDetailModal .modal-header {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e9ecef;
+    border-radius: 1rem 1rem 0 0;
+    padding: 1.5rem;
+}
+
+#postDetailsModal .modal-title,
+#submissionDetailModal .modal-title {
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+/* Consistent badge styling */
+#postDetailsModal .badge,
+#submissionDetailModal .badge {
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.375rem 0.75rem;
+}
+
+/* Status badge colors */
+.badge.bg-danger { background-color: #dc3545 !important; }
+.badge.bg-warning { background-color: #ffc107 !important; color: #000 !important; }
+.badge.bg-success { background-color: #198754 !important; }
+.badge.bg-secondary { background-color: #6c757d !important; }
+
+/* Chat container styling */
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* Main post area */
+.main-post {
+    background-color: #f8f9fa;
+    border-left: 4px solid var(--primary-color);
+    margin-bottom: 0;
+}
+
+/* Replies container */
+.replies-container {
+    flex: 1;
+    overflow-y: auto;
+    background-color: #f8f9fa !important;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+}
+
+.replies-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.replies-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.replies-container::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 3px;
+}
+
+.replies-container::-webkit-scrollbar-thumb:hover {
+    background-color: #94a3b8;
+}
+
+/* Enhanced message bubbles */
+.message-bubble {
+    max-width: 85%;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s ease;
+}
+
+.message-bubble:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* User messages (from the user) */
+.user-message {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    margin-left: auto;
+    border-bottom-right-radius: 0.5rem;
+}
+
+/* Admin messages (from admin/staff) */
+.admin-message {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    margin-right: auto;
+    border-bottom-left-radius: 0.5rem;
+}
+
+/* Original post styling */
+.admin-bg,
+.original-post {
+    background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+    border-left: 4px solid var(--primary-color);
+    color: #2c3e50;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 1rem;
+    border-bottom-left-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.original-post h5,
+.admin-bg h5 {
+    color: var(--primary-color);
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+}
+
+.original-post p,
+.admin-bg p {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+/* Reply form container */
+.reply-form-container {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border-top: 1px solid #e9ecef;
+    padding: 1.5rem;
+}
+
+/* Enhanced reply input group */
+.reply-form .input-group {
+    border-radius: 2rem;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e9ecef;
+}
+
+.reply-form .input-group .btn {
+    border: none;
+    padding: 0.75rem 1rem;
+}
+
+.reply-form .input-group .form-control {
+    border: none;
+    padding: 0.75rem 1rem;
+    background-color: #ffffff;
+}
+
+.reply-form .input-group .form-control:focus {
+    box-shadow: none;
+    border-color: transparent;
+}
+
+/* Attachment preview */
+#attachmentPreview {
+    border-radius: 0.75rem;
+    border: 1px solid #e9ecef;
+}
+
+/* Person icon styling */
+.bi-person-circle {
+    color: var(--primary-color);
+    opacity: 0.8;
+}
+
+/* Enhanced forward button */
+#forwardPostBtn {
+    border-radius: 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+#forwardPostBtn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Forward info alert */
+#forwardInfo .alert {
+    background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+    border: 1px solid #b3e5fc;
+    border-radius: 0.75rem;
+    margin-bottom: 0;
+}
+
 /* Medium devices and larger - minimal media query */
 @media (min-width: 992px) {
     /* Ensure the sidebar toggle is visible */

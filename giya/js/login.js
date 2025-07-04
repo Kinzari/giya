@@ -24,7 +24,7 @@ document
 
         const mathAnswerInput = document.getElementById("math-answer");
         if (mathAnswer !== num1 + num2) {
-            toastr.error("Incorrect math verification. Please try again.");
+            // toastr.error("Incorrect math verification. Please try again.");
             mathAnswerInput.classList.add("incorrect");
             mathAnswerInput.classList.remove("correct");
             return;
@@ -88,26 +88,26 @@ document
                         userTypeId === 3 ||
                         userTypeId === 4)
                 ) {
-                    toastr.warning("Please change your default password.");
+                    // toastr.warning("Please change your default password.");
                     setTimeout(() => {
-                        window.location.href = "./change-password-new.html";  // Changed from /change-password.html
+                        window.location.href = "./change-password-new.html";
                     }, 2000);
                     return;
                 }
 
 
                 if (userTypeId === 5 || userTypeId === 6) {
-                    toastr.success("Login successful!");
+                    // toastr.success("Login successful!");
                     setTimeout(() => {
-                        window.location.href = "./dashboard/dashboard.html";  // Changed from dashboard/dashboard.html
+                        window.location.href = "./dashboard/dashboard.html";
                     }, 2000);
                     return;
                 }
 
 
-                toastr.success("Login successful!");
+                // toastr.success("Login successful!");
                 setTimeout(() => {
-                    window.location.href = "./choose-concern.html";  // Changed from /choose-concern.html
+                    window.location.href = "./choose-concern.html";
                 }, 2000);
 
             } else {
