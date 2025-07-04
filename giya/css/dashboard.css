@@ -301,20 +301,20 @@ button.sidebar-toggle {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
-/* User messages (from the user) */
+/* User messages (from the user) - positioned on left */
 .user-message {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    margin-left: auto;
-    border-bottom-right-radius: 0.5rem;
+    margin-right: auto;
+    border-bottom-left-radius: 0.5rem;
 }
 
-/* Admin messages (from admin/staff) */
+/* Admin messages (from admin/staff) - positioned on right */
 .admin-message {
     background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
     color: white;
-    margin-right: auto;
-    border-bottom-left-radius: 0.5rem;
+    margin-left: auto;
+    border-bottom-right-radius: 0.5rem;
 }
 
 /* Original post styling */

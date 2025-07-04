@@ -109,24 +109,24 @@ body {
 .chat-container {
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 200px);
-    max-height: 600px;
 }
 
 .replies-container {
     flex-grow: 1;
     overflow-y: auto;
-    max-height: 450px;
     padding: 1rem;
     background-color: #f8f9fa;
+    scroll-behavior: smooth;
 }
 
-/* Enhanced message bubbles - consistent with dashboard.css */
+/* Enhanced message bubbles - consistent with dashboard.css and choose-concern */
 .message-bubble {
-    max-width: 85%;
-    margin-bottom: 1rem;
-    padding: 1rem;
     border-radius: 1rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    max-width: 85% !important;
+    word-wrap: break-word;
+    width: auto !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     transition: all 0.2s ease;
 }
@@ -135,20 +135,60 @@ body {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
-/* User messages (from the user) */
+/* User messages (from the user) - positioned on right */
 .user-message {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
     color: white;
     margin-left: auto;
+    margin-right: 0;
     border-bottom-right-radius: 0.5rem;
 }
 
-/* Admin messages (from admin/staff) */
+/* Admin messages (from admin/staff) - positioned on left */
 .admin-message {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     margin-right: auto;
+    margin-left: 0;
     border-bottom-left-radius: 0.5rem;
+}
+
+/* Message content styling */
+.message-bubble .message-content strong {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: white;
+}
+
+.message-bubble.admin-message .message-content {
+    text-align: left;
+}
+
+.message-bubble.user-message .message-content {
+    text-align: right;
+}
+
+.message-content h5 {
+    color: white;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.message-content p {
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+    color: white;
+}
+
+.message-content small {
+    color: white;
+    font-size: 0.875rem;
+}
+
+.message-content .badge {
+    font-size: 0.75rem;
+    margin-right: 0.25rem;
 }
 
 /* Original post styling */
@@ -176,25 +216,36 @@ body {
     line-height: 1.6;
 }
 
-/* Reply form styling */
+/* Reply form styling - enhanced from choose-concern */
 .reply-form-container {
-    padding: 1rem;
-    background-color: #f8f9fa;
-    border-top: 1px solid #dee2e6;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border-top: 1px solid #e9ecef;
+    padding: 1.5rem;
+}
+
+.reply-form {
+    width: 100%;
 }
 
 .reply-form .input-group {
-    border-radius: 1.5rem;
+    border: 1px solid #dee2e6;
+    border-radius: 50px;
     overflow: hidden;
 }
 
 .reply-form .form-control {
-    border: 1px solid #dee2e6;
+    border: none;
+    box-shadow: none;
     padding: 0.75rem 1rem;
 }
 
-.reply-form .btn-primary {
-    border-radius: 0 1.5rem 1.5rem 0;
+.reply-form .btn {
+    border: none;
+    padding: 0.75rem 1rem;
+}
+
+.reply-form .btn-outline-secondary {
+    border-right: 1px solid #dee2e6;
 }
 
 /* Privacy policy modal */
@@ -546,10 +597,6 @@ body {
 
 /* Responsive adaptations for smaller screens */
 @media (max-width: 576px) {
-    .chat-container {
-        height: calc(100vh - 10rem);
-    }
-
     .floating-btn {
         bottom: 1rem;
         right: 1rem;
@@ -837,6 +884,7 @@ body {
 
 /* Consistent message bubble styles for user side */
 #submissionDetailModal .message-bubble {
+
     max-width: 85%;
     margin-bottom: 1rem;
     padding: 1rem;
@@ -850,16 +898,18 @@ body {
 }
 
 #submissionDetailModal .user-message {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
     color: white;
     margin-left: auto;
+    margin-right: 0;
     border-bottom-right-radius: 0.5rem;
 }
 
 #submissionDetailModal .admin-message {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     margin-right: auto;
+    margin-left: 0;
     border-bottom-left-radius: 0.5rem;
 }
 
@@ -874,22 +924,214 @@ body {
     margin-bottom: 1.5rem;
 }
 
-/* Responsive adjustments for user side */
-@media (max-width: 768px) {
-    #submissionDetailModal .modal-dialog {
-        margin: 1rem;
-    }
+/* Gmail-inspired styles for choose-concern functionality */
+.gmail-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dadce0;
+    padding: 12px 24px;
+    min-height: 64px;
+}
 
-    #submissionDetailModal .message-bubble {
-        max-width: 95%;
-        padding: 0.75rem;
-    }
+.gmail-sidebar {
+    background-color: #ffffff;
+    border-right: 1px solid #dadce0;
+    height: calc(100vh - 64px);
+    overflow-y: auto;
+}
 
-    #replyFormContainer {
-        padding: 1rem;
-    }
+.gmail-main {
+    background-color: #ffffff;
+    height: calc(100vh - 64px);
+    overflow-y: auto;
+}
 
-    #submissionDetailModal .modal-header {
-        padding: 1rem;
-    }
+.compose-btn {
+    background-color: #1a73e8;
+    color: white;
+    border: none;
+    border-radius: 24px;
+    padding: 8px 24px;
+    font-weight: 500;
+    box-shadow: 0 1px 3px 0 rgba(60,64,67,.30), 0 4px 8px 3px rgba(60,64,67,.15);
+    transition: all 0.2s;
+}
+
+.compose-btn:hover {
+    background-color: #1557b0;
+    color: white;
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,.30), 0 2px 6px 2px rgba(60,64,67,.15);
+}
+
+.sidebar-item {
+    padding: 8px 24px;
+    margin: 2px 8px;
+    border-radius: 0 24px 24px 0;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.sidebar-item:hover {
+    background-color: #f1f3f4;
+}
+
+.sidebar-item.active {
+    background-color: #fce8e6;
+    color: #d93025;
+    font-weight: 500;
+}
+
+.mail-item {
+    border-bottom: 1px solid #f0f0f0;
+    padding: 12px 24px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.mail-item:hover {
+    background-color: #f8f9fa;
+    box-shadow: inset 1px 0 0 #dadce0, inset -1px 0 0 #dadce0;
+}
+
+.mail-item.unread {
+    background-color: #ffffff;
+    font-weight: 600;
+}
+
+.mail-item.read {
+    background-color: #f8f9fa;
+    font-weight: 400;
+}
+
+.search-box {
+    background-color: #f1f3f4;
+    border: none;
+    border-radius: 24px;
+    padding: 8px 16px;
+    width: 100%;
+    max-width: 600px;
+}
+
+.search-box:focus {
+    outline: none;
+    background-color: #ffffff;
+    box-shadow: 0 1px 6px rgba(60,64,67,.28);
+}
+
+.logo-text {
+    font-size: 22px;
+    font-weight: 400;
+    color: #5f6368;
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #1a73e8;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.mail-toolbar {
+    border-bottom: 1px solid #dadce0;
+    background-color: #ffffff;
+    padding: 8px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.toolbar-btn {
+    background: none;
+    border: none;
+    padding: 8px;
+    border-radius: 50%;
+    color: #5f6368;
+    transition: background-color 0.2s;
+}
+
+.toolbar-btn:hover {
+    background-color: #f1f3f4;
+}
+
+.empty-state {
+    text-align: center;
+    color: #5f6368;
+    padding: 48px 24px;
+}
+
+.empty-state i {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+/* Main post styling for choose-concern */
+.main-post {
+    background-color: white;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 1rem;
+}
+
+.main-post .message-bubble {
+    max-width: 85% !important;
+    width: auto !important;
+    background: white !important;
+    color: #2c3e50 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.main-post .message-bubble.user-message {
+    align-self: flex-end;
+}
+
+.main-post .message-bubble.admin-message {
+    align-self: flex-start;
+}
+
+.main-post .message-bubble h5 {
+    color: #1a73e8 !important;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+}
+
+.main-post .message-bubble p {
+    margin-bottom: 1rem;
+    line-height: 1.6;
+    color: #2c3e50 !important;
+}
+
+.main-post .message-bubble small {
+    color: #6c757d !important;
+}
+
+/* Main post styling improvements */
+.main-post-bubble {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.main-post-bubble .message-content h4 {
+    font-size: 1.25rem;
+    line-height: 1.4;
+}
+
+.main-post-bubble .post-message p {
+    font-size: 1rem;
+    color: #495057;
+    line-height: 1.6;
+}
+
+.main-post-bubble .post-meta {
+    border-top: 1px solid #dee2e6;
+    padding-top: 0.75rem;
+    margin-top: 0.75rem;
 }

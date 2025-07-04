@@ -19,7 +19,8 @@ const AuthHelper = {
             isValid: !!(userTypeId && firstName && id),
             userTypeId,
             firstName,
-            id
+            id,
+            userId: id // Add userId for compatibility
         };
     },
     getCurrentUser() {

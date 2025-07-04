@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIYA - Gmail Style Interface (Demo)</title>
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <link rel="stylesheet" href="css/toastr.css">
+    <link rel="stylesheet" href="css/gmail-style.css">
+    <style>
+        /* Gmail-inspired styles */
+        .gmail-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dadce0;
+            padding: 12px 24px;
+            min-height: 64px;
+        }
+
+        .gmail-sidebar {
+            background-color: #ffffff;
+            border-right: 1px solid #dadce0;
+            height: calc(100vh - 64px);
+            overflow-y: auto;
+        }
+
+        .gmail-main {
+            background-color: #ffffff;
+            height: calc(100vh - 64px);
+            overflow-y: auto;
+        }
+
+        .compose-btn {
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 24px;
+            padding: 8px 24px;
+            font-weight: 500;
+            box-shadow: 0 1px 3px 0 rgba(60,64,67,.30), 0 4px 8px 3px rgba(60,64,67,.15);
+            transition: all 0.2s;
+        }
+
+        .compose-btn:hover {
+            background-color: #1557b0;
+            color: white;
+            box-shadow: 0 1px 2px 0 rgba(60,64,67,.30), 0 2px 6px 2px rgba(60,64,67,.15);
+        }
+
+        .sidebar-item {
+            padding: 8px 24px;
+            margin: 2px 8px;
+            border-radius: 0 24px 24px 0;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .sidebar-item:hover {
+            background-color: #f1f3f4;
+        }
+
+        .sidebar-item.active {
+            background-color: #fce8e6;
+            color: #d93025;
+            font-weight: 500;
+        }
+
+        .mail-item {
+            border-bottom: 1px solid #f0f0f0;
+            padding: 12px 24px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .mail-item:hover {
+            background-color: #f8f9fa;
+            box-shadow: inset 1px 0 0 #dadce0, inset -1px 0 0 #dadce0;
+        }
+
+        .mail-item.unread {
+            background-color: #ffffff;
+            font-weight: 600;
+        }
+
+        .mail-item.read {
+            background-color: #f8f9fa;
+            font-weight: 400;
+        }
+
+        .status-badge {
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+        }
+
+        .status-pending {
+            background-color: #fef7e0;
+            color: #b06000;
+        }
+
+        .status-ongoing {
+            background-color: #e8f0fe;
+            color: #1a73e8;
+        }
+
+        .status-resolved {
+            background-color: #e6f4ea;
+            color: #137333;
+        }
+
+        .search-box {
+            background-color: #f1f3f4;
+            border: none;
+            border-radius: 24px;
+            padding: 8px 16px;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .search-box:focus {
+            outline: none;
+            background-color: #ffffff;
+            box-shadow: 0 1px 6px rgba(60,64,67,.28);
+        }
+
+        .logo-text {
+            font-size: 22px;
+            font-weight: 400;
+            color: #5f6368;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #1a73e8;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .mail-toolbar {
+            border-bottom: 1px solid #dadce0;
+            background-color: #ffffff;
+            padding: 8px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .toolbar-btn {
+            background: none;
+            border: none;
+            padding: 8px;
+            border-radius: 50%;
+            color: #5f6368;
+            transition: background-color 0.2s;
+        }
+
+        .toolbar-btn:hover {
+            background-color: #f1f3f4;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #5f6368;
+            padding: 48px 24px;
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Gmail-style Header -->
+    <header class="gmail-header d-flex align-items-center">
+        <div class="d-flex align-items-center flex-grow-1">
+            <!-- Logo -->
+            <div class="me-4">
+                <span class="logo-text">GIYA</span>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="flex-grow-1 me-4">
+                <div class="position-relative">
+                    <i class="fas fa-search position-absolute" style="left: 16px; top: 50%; transform: translateY(-50%); color: #5f6368;"></i>
+                    <input type="text" class="search-box ps-5" id="globalSearch" placeholder="Search posts...">
+                </div>
+            </div>
+        </div>
+
+        <!-- User Menu -->
+        <div class="dropdown">
+            <div class="user-avatar" data-bs-toggle="dropdown" aria-expanded="false" id="userMenuButton">
+                <span id="userInitials">J</span>
+            </div>
+            <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="userMenuButton">
+                <li><a class="dropdown-item" href="edit-profile.html"><i class="fas fa-edit me-2"></i> Edit Profile</a></li>
+                <li><button class="dropdown-item" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i> Logout</button></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Gmail-style Layout -->
+    <div class="container-fluid p-0">
+        <div class="row g-0">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 gmail-sidebar">
+                <!-- Compose Button -->
+                <div class="p-3">
+                    <button class="compose-btn w-100" id="composeBtn">
+                        <i class="fas fa-plus me-2"></i>Compose
+                    </button>
+                </div>
+
+                <!-- Sidebar Navigation -->
+                <nav class="nav flex-column">
+                    <div class="sidebar-item active" data-filter="inbox">
+                        <i class="fas fa-inbox me-3"></i>Inbox
+                        <span class="badge bg-primary ms-auto" id="inboxCount">3</span>
+                    </div>
+                    <div class="sidebar-item" data-filter="sent">
+                        <i class="fas fa-paper-plane me-3"></i>Sent
+                    </div>
+                    <div class="sidebar-item" data-filter="pending">
+                        <i class="fas fa-clock me-3"></i>Pending
+                        <span class="badge bg-warning ms-auto" id="pendingCount">2</span>
+                    </div>
+                    <div class="sidebar-item" data-filter="ongoing">
+                        <i class="fas fa-cog me-3"></i>Ongoing
+                        <span class="badge bg-info ms-auto" id="ongoingCount">1</span>
+                    </div>
+                    <div class="sidebar-item" data-filter="resolved">
+                        <i class="fas fa-check-circle me-3"></i>Resolved
+                        <span class="badge bg-success ms-auto" id="resolvedCount">5</span>
+                    </div>
+                </nav>
+
+                <!-- Categories -->
+                <div class="p-3 border-top mt-3">
+                    <small class="text-muted fw-bold">CATEGORIES</small>
+                    <div class="mt-2">
+                        <div class="sidebar-item" data-type="inquiry">
+                            <i class="fas fa-question-circle me-3 text-info"></i>Inquiry
+                        </div>
+                        <div class="sidebar-item" data-type="feedback">
+                            <i class="fas fa-exclamation-triangle me-3 text-warning"></i>Complain
+                        </div>
+                        <div class="sidebar-item" data-type="suggestion">
+                            <i class="fas fa-lightbulb me-3 text-success"></i>Suggestion
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 gmail-main">
+                <!-- Toolbar -->
+                <div class="mail-toolbar d-flex align-items-center">
+                    <div class="d-flex align-items-center">
+                        <button class="toolbar-btn" id="selectAllBtn" title="Select all">
+                            <i class="fas fa-check-square"></i>
+                        </button>
+                        <button class="toolbar-btn" id="refreshBtn" title="Refresh">
+                            <i class="fas fa-redo"></i>
+                        </button>
+                        <div class="vr mx-2"></div>
+                        <button class="toolbar-btn" id="archiveBtn" title="Archive">
+                            <i class="fas fa-archive"></i>
+                        </button>
+                        <button class="toolbar-btn" id="deleteBtn" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+
+                    <div class="ms-auto">
+                        <small class="text-muted" id="mailCount">3 of 11</small>
+                    </div>
+                </div>
+
+                <!-- Mail List -->
+                <div id="mailList">
+                    <!-- Sample mail items -->
+                    <div class="mail-item unread" data-id="1">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <input type="checkbox" class="form-check-input mail-checkbox" data-id="1">
+                            </div>
+                            <div class="me-3">
+                                <i class="fas fa-question-circle text-info"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex align-items-center mb-1">
+                                            <span class="fw-bold me-2">Library Book Request</span>
+                                            <span class="status-badge status-pending">Pending</span>
+                                        </div>
+                                        <div class="text-muted small">
+                                            I would like to request access to additional library resources for my research project...
+                                        </div>
+                                    </div>
+                                    <div class="text-muted small ms-3">
+                                        2:30 PM
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mail-item unread" data-id="2">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <input type="checkbox" class="form-check-input mail-checkbox" data-id="2">
+                            </div>
+                            <div class="me-3">
+                                <i class="fas fa-exclamation-triangle text-warning"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex align-items-center mb-1">
+                                            <span class="fw-bold me-2">Cafeteria Service Issue</span>
+                                            <span class="status-badge status-ongoing">Ongoing</span>
+                                        </div>
+                                        <div class="text-muted small">
+                                            The cafeteria has been serving cold food during lunch hours. This has been happening...
+                                        </div>
+                                    </div>
+                                    <div class="text-muted small ms-3">
+                                        Yesterday
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mail-item read" data-id="3">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <input type="checkbox" class="form-check-input mail-checkbox" data-id="3">
+                            </div>
+                            <div class="me-3">
+                                <i class="fas fa-lightbulb text-success"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex align-items-center mb-1">
+                                            <span class="fw-bold me-2">Mobile App Suggestion</span>
+                                            <span class="status-badge status-resolved">Resolved</span>
+                                        </div>
+                                        <div class="text-muted small">
+                                            It would be great if we could have a mobile app for easier access to school services...
+                                        </div>
+                                    </div>
+                                    <div class="text-muted small ms-3">
+                                        Dec 15
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Compose Modal -->
+    <div class="modal fade" id="composeModal" tabindex="-1" aria-labelledby="composeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #155f37; color: white;">
+                    <h5 class="modal-title" id="composeModalLabel">New Post</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="composeForm">
+                        <div class="mb-3">
+                            <label for="postType" class="form-label">Type</label>
+                            <select class="form-select" id="postType" required>
+                                <option value="">Select concern type...</option>
+                                <option value="inquiry">Inquiry (Pangutana)</option>
+                                <option value="feedback">Complain (Reklamo)</option>
+                                <option value="suggestion">Suggestion (Sugyot)</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="postTitle" class="form-label">Subject</label>
+                            <input type="text" class="form-control" id="postTitle" placeholder="Enter subject..." required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="postContent" class="form-label">Message</label>
+                            <textarea class="form-control" id="postContent" rows="6" placeholder="Type your message here..." required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="postFiles" class="form-label">Attachments (Optional)</label>
+                            <input type="file" class="form-control" id="postFiles" multiple accept="image/*,.pdf,.doc,.docx">
+                            <div class="form-text">You can attach images, PDFs, or Word documents.</div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn" style="background-color: #155f37; color: white;" id="sendPostBtn">
+                        <i class="fas fa-paper-plane me-2"></i>Send
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script>
+        // Demo functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const composeModal = new bootstrap.Modal(document.getElementById('composeModal'));
+
+            // Compose button
+            document.getElementById('composeBtn').addEventListener('click', () => {
+                composeModal.show();
+            });
+
+            // Send button (demo)
+            document.getElementById('sendPostBtn').addEventListener('click', () => {
+                const postType = document.getElementById('postType').value;
+                const postTitle = document.getElementById('postTitle').value;
+                const postContent = document.getElementById('postContent').value;
+
+                if (postType && postTitle && postContent) {
+                    toastr.success('Post submitted successfully! (Demo Mode)');
+                    composeModal.hide();
+                    document.getElementById('composeForm').reset();
+                } else {
+                    toastr.error('Please fill in all required fields.');
+                }
+            });
+
+            // Sidebar navigation
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+
+                    const filter = item.dataset.filter || item.dataset.type;
+                    if (filter) {
+                        toastr.info(`Filtering by: ${filter}`);
+                    }
+                });
+            });
+
+            // Mail item clicks
+            document.querySelectorAll('.mail-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    if (e.target.type !== 'checkbox') {
+                        toastr.info('Opening post details... (Demo Mode)');
+                    }
+                });
+            });
+
+            // Checkbox functionality
+            document.querySelectorAll('.mail-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', (e) => {
+                    const mailItem = e.target.closest('.mail-item');
+                    if (e.target.checked) {
+                        mailItem.style.backgroundColor = '#fce8e6';
+                    } else {
+                        mailItem.style.backgroundColor = '';
+                    }
+                    e.stopPropagation();
+                });
+            });
+
+            // Toolbar buttons
+            document.getElementById('refreshBtn').addEventListener('click', () => {
+                toastr.info('Refreshing... (Demo Mode)');
+            });
+
+            document.getElementById('selectAllBtn').addEventListener('click', () => {
+                const checkboxes = document.querySelectorAll('.mail-checkbox');
+                const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+                checkboxes.forEach(cb => {
+                    cb.checked = !allChecked;
+                    const event = new Event('change', { bubbles: true });
+                    cb.dispatchEvent(event);
+                });
+            });
+
+            // Search functionality
+            document.getElementById('globalSearch').addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                toastr.info(`Searching for: ${searchTerm} (Demo Mode)`);
+            });
+
+            // Set demo user
+            document.getElementById('userInitials').textContent = 'J';
+        });
+    </script>
+</body>
+</html>
