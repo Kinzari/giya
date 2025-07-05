@@ -98,28 +98,6 @@ document.addEventListener('DOMContentLoaded', function() {
         table = initializeTable("latestPostsTable", action);
         window.latestPostsTable = table;
     }
-    else if (document.getElementById("postsTable")) {
-        let action = "";
-
-        if (path.includes("students.html")) {
-            action = (userTypeId == 5 && departmentId) ?
-                `get_student_posts_by_department&department_id=${departmentId}` :
-                "get_student_posts";
-        }
-        else if (path.includes("visitors.html")) {
-            action = (userTypeId == 5 && departmentId) ?
-                `get_visitor_posts_by_department&department_id=${departmentId}` :
-                "get_visitor_posts";
-        }
-        else if (path.includes("employees.html")) {
-            action = (userTypeId == 5 && departmentId) ?
-                `get_employee_posts_by_department&department_id=${departmentId}` :
-                "get_employee_posts";
-        }
-
-        table = initializeTable("postsTable", action);
-        window.postsTable = table;
-    }
 
     if (table) {
         GiyaTable.attachFiltering(table, '.btn-group button');
@@ -396,9 +374,7 @@ function updateReplyForm(status, postId) {
 function isAdminDashboardPage() {
     const path = window.location.pathname.toLowerCase();
     return path.includes('/dashboard/latest-post.html') ||
-           path.includes('/dashboard/visitors.html') ||
-           path.includes('/dashboard/students.html') ||
-           path.includes('/dashboard/employess.html');
+           path.includes('/dashboard/active-post.html');
 }
 
 function scrollToBottom() {

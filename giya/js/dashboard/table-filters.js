@@ -2,276 +2,8 @@
  * Table Filters JS - Handles dynamic filtering for GIYA tables
  */
 
-document.addEventListener('DOMContentLoaded', function() {
-    const baseURL = typeof getBaseURL === 'function' ? getBaseURL() : sessionStorage.getItem('baseURL');
-
-    if (!baseURL) {
-        toastr.warning('API URL not found. You may need to login again.');
-    }
-
-    initializeMasterData();
-    initializeFilterListeners();
-});
-
-/**
- * Load master data for filter dropdowns (departments, campuses)
- */
-async function initializeMasterData() {
-    try {
-        await loadDepartments();
-        await loadCampuses();
-        checkPOCRestrictions();
-    } catch (error) {
-        toastr.error('Failed to load filter data. Some features may be limited.');
-    }
-}
-
-/**
- * Load departments for the filter dropdown
- */
-async function loadDepartments() {
-    try {
-        const baseURL = typeof getBaseURL === 'function' ? getBaseURL() : sessionStorage.getItem('baseURL');
-        if (!baseURL) {
-            toastr.warning('Base URL not found. Please login again.');
-            return false;
-        }
-
-        const response = await axios.get(`${baseURL}masterfile.php?action=departments`);
-
-        if (response.data && response.data.success && Array.isArray(response.data.data)) {
-            const departmentSelects = document.querySelectorAll('#department-filter, #forwardDepartment');
-
-            departmentSelects.forEach(departmentSelect => {
-                if (!departmentSelect) return;
-
-                const firstOption = departmentSelect.querySelector('option:first-child');
-                departmentSelect.innerHTML = '';
-                departmentSelect.appendChild(firstOption);
-
-                response.data.data.forEach(dept => {
-                    const option = document.createElement('option');
-                    option.value = dept.department_id;
-                    option.textContent = dept.department_name;
-                    departmentSelect.appendChild(option);
-                });
-            });
-
-            return true;
-        } else {
-            return false;
-        }
-    } catch (error) {
-        return false;
-    }
-}
-
-/**
- * Load campuses for the filter dropdown
- */
-async function loadCampuses() {
-    try {
-        const baseURL = typeof getBaseURL === 'function' ? getBaseURL() : sessionStorage.getItem('baseURL');
-        if (!baseURL) {
-            toastr.warning('Base URL not found. Please login again.');
-            return false;
-        }
-
-        const response = await axios.get(`${baseURL}masterfile.php?action=campuses`);
-
-        if (response.data && response.data.success && Array.isArray(response.data.data)) {
-            const campusSelects = document.querySelectorAll('#campus-filter, #forwardCampus');
-
-            campusSelects.forEach(campusSelect => {
-                if (!campusSelect) return;
-
-                const firstOption = campusSelect.querySelector('option:first-child');
-                campusSelect.innerHTML = '';
-                campusSelect.appendChild(firstOption);
-
-                response.data.data.forEach(campus => {
-                    const option = document.createElement('option');
-                    option.value = campus.campus_id;
-                    option.textContent = campus.campus_name;
-                    campusSelect.appendChild(option);
-                });
-            });
-
-            return true;
-        } else {
-            return false;
-        }
-    } catch (error) {
-        return false;
-    }
-}
-
-/**
- * Set up filter event listeners for DataTable filtering
- */
-function initializeFilterListeners() {
-    const filterControls = document.querySelectorAll('.filter-control');
-
-    filterControls.forEach(filter => {
-        filter.addEventListener('change', function() {
-            applyTableFilters();
-        });
-    });
-
-    setupForwardPostHandler();
-}
-
-/**
- * Apply all selected filters to the DataTable
- */
-function applyTableFilters() {
-    const tableIds = ['postsTable', 'latestPostsTable', 'resolvedPostsTable'];
-    let activeTable = null;
-
-    for (const id of tableIds) {
-        const table = document.getElementById(id);
-        if (table) {
-            activeTable = $(`#${id}`).DataTable();
-            break;
-        }
-    }
-
-    if (!activeTable) {
-        return;
-    }
-
-    try {
-        const userInfo = sessionStorage.getItem('user');
-        const user = userInfo ? JSON.parse(userInfo) : null;
-        const isPOC = user && user.user_typeId == 5;
-
-        document.querySelectorAll('.filter-control').forEach(filter => {
-            const value = filter.value;
-            const columnIndex = parseInt(filter.getAttribute('data-column'));
-
-            if (isPOC && filter.id === 'department-filter') {
-                return;
-            }
-
-            if (!isNaN(columnIndex)) {
-                activeTable.column(columnIndex).search(value);
-            }
-        });
-
-        activeTable.draw();
-
-        const tableEl = activeTable.table().node();
-        if (tableEl) {
-            tableEl.style.display = '';
-        }
-    } catch (error) {
-        // Handle error silently
-    }
-}
-
-/**
- * Check if the user is a POC and apply restrictions
- */
-function checkPOCRestrictions() {
-    const userInfo = sessionStorage.getItem('user');
-    if (!userInfo) return;
-
-    try {
-        const user = JSON.parse(userInfo);
-
-        if (user.user_typeId == 5) {
-            const departmentFilter = document.getElementById('department-filter');
-            if (departmentFilter && user.user_departmentId) {
-                departmentFilter.value = user.user_departmentId;
-                departmentFilter.disabled = true;
-
-                addLockIndicator(departmentFilter, 'Department filter is locked based on your role');
-
-                const tableIds = ['postsTable', 'latestPostsTable'];
-                for (const id of tableIds) {
-                    const table = $(`#${id}`).DataTable();
-                    if (table) {
-                        table.column(5).search('').draw();
-
-                        setTimeout(() => {
-                            table.column(5).search(user.department_name || user.user_departmentId).draw();
-                        }, 100);
-                    }
-                }
-            }
-        }
-    } catch (e) {
-        // Handle error silently
-    }
-}
-
-/**
- * Apply POC locks to department and campus filters
- */
-function applyPOCLocks(user) {
-    if (user.user_departmentId) {
-        const departmentFilter = document.getElementById('department-filter');
-        if (departmentFilter) {
-            departmentFilter.value = user.user_departmentId;
-            departmentFilter.disabled = true;
-
-            addLockIndicator(departmentFilter, 'Department filter is locked based on your role');
-        }
-    }
-
-    if (user.user_campusId) {
-        const campusFilter = document.getElementById('campus-filter');
-        if (campusFilter) {
-            campusFilter.value = user.user_campusId;
-            campusFilter.disabled = true;
-
-            addLockIndicator(campusFilter, 'Campus filter is locked based on your role');
-        }
-    }
-
-    setTimeout(function() {
-        try {
-            const tableIds = ['postsTable', 'latestPostsTable', 'resolvedPostsTable'];
-            for (const id of tableIds) {
-                const tableEl = document.getElementById(id);
-                if (tableEl && $.fn.DataTable.isDataTable(`#${id}`)) {
-                    const dt = $(`#${id}`).DataTable();
-
-                    const deptCol = dt.column(5);
-                    if (deptCol && user.user_departmentId) {
-                        deptCol.search(user.department_name || user.user_departmentId).draw();
-                    }
-
-                    tableEl.style.display = '';
-                    break;
-                }
-            }
-        } catch (e) {
-            // Handle error silently
-        }
-    }, 1000);
-}
-
-/**
- * Add a lock indicator to a filter element
- */
-function addLockIndicator(element, tooltip) {
-    const lockIcon = document.createElement('i');
-    lockIcon.className = 'bi bi-lock-fill text-secondary filter-lock-icon';
-    lockIcon.style.position = 'absolute';
-    lockIcon.style.right = '10px';
-    lockIcon.style.top = '50%';
-    lockIcon.style.transform = 'translateY(-50%)';
-    lockIcon.title = tooltip || 'This filter is locked';
-
-    const parentDiv = element.parentElement;
-    if (parentDiv) {
-        parentDiv.style.position = 'relative';
-        parentDiv.appendChild(lockIcon);
-
-        parentDiv.classList.add('locked-filter');
-    }
-}
+// Note: TableFilters object handles all initialization via jQuery document ready
+// This ensures compatibility with existing jQuery-based table initialization
 
 /**
  * Set up forward post functionality
@@ -365,6 +97,94 @@ const TableFilters = {
     init: function() {
         this.loadFilterOptions();
         this.setupEventHandlers();
+        this.checkPOCRestrictions();
+        setupForwardPostHandler(); // Set up forward post functionality
+    },
+
+    checkPOCRestrictions: function() {
+        const userInfo = sessionStorage.getItem('user');
+        if (!userInfo) return;
+
+        try {
+            const user = JSON.parse(userInfo);
+
+            if (user.user_typeId == 5) {
+                this.applyPOCLocks(user);
+            }
+        } catch (e) {
+            console.error('Error applying POC restrictions:', e);
+        }
+    },
+
+    applyPOCLocks: function(user) {
+        if (user.user_departmentId) {
+            const departmentFilter = document.getElementById('department-filter');
+            if (departmentFilter) {
+                departmentFilter.value = user.user_departmentId;
+                departmentFilter.disabled = true;
+
+                this.addLockIndicator(departmentFilter, 'Department filter is locked based on your role');
+            }
+        }
+
+        if (user.user_campusId) {
+            const campusFilter = document.getElementById('campus-filter');
+            if (campusFilter) {
+                campusFilter.value = user.user_campusId;
+                campusFilter.disabled = true;
+
+                this.addLockIndicator(campusFilter, 'Campus filter is locked based on your role');
+            }
+        }
+
+        // Apply the POC filtering to tables after they are initialized
+        setTimeout(() => {
+            try {
+                const tableIds = ['latestPostsTable', 'resolvedPostsTable'];
+                for (const id of tableIds) {
+                    const tableEl = document.getElementById(id);
+                    if (tableEl && $.fn.DataTable.isDataTable(`#${id}`)) {
+                        const dt = $(`#${id}`).DataTable();
+
+                        // Department is column 4, Campus is column 5
+                        if (user.user_departmentId) {
+                            const deptCol = dt.column(4);
+                            if (deptCol) {
+                                deptCol.search(user.department_name || '').draw();
+                            }
+                        }
+
+                        if (user.user_campusId) {
+                            const campusCol = dt.column(5);
+                            if (campusCol) {
+                                campusCol.search(user.campus_name || '').draw();
+                            }
+                        }
+
+                        tableEl.style.display = '';
+                        break;
+                    }
+                }
+            } catch (e) {
+                console.error('Error applying POC table filters:', e);
+            }
+        }, 1000);
+    },
+
+    addLockIndicator: function(element, tooltip) {
+        const lockIcon = document.createElement('i');
+        lockIcon.className = 'bi bi-lock-fill text-secondary filter-lock-icon';
+        lockIcon.style.position = 'absolute';
+        lockIcon.style.right = '10px';
+        lockIcon.style.top = '50%';
+        lockIcon.style.transform = 'translateY(-50%)';
+        lockIcon.title = tooltip || 'This filter is locked';
+
+        const parentDiv = element.parentElement;
+        if (parentDiv) {
+            parentDiv.style.position = 'relative';
+            parentDiv.appendChild(lockIcon);
+        }
     },
 
     loadFilterOptions: function() {
@@ -378,7 +198,8 @@ const TableFilters = {
         axios.get(`${baseURL}masterfile.php?action=departments`)
             .then(response => {
                 if (response.data && response.data.success) {
-                    this.populateFilter('departmentFilter', response.data.data, 'department_id', 'department_name');
+                    this.populateFilter('department-filter', response.data.data, 'department_id', 'department_name');
+                    this.populateFilter('forwardDepartment', response.data.data, 'department_id', 'department_name');
                 }
             })
             .catch(() => console.error('Failed to load departments'));
@@ -387,7 +208,8 @@ const TableFilters = {
         axios.get(`${baseURL}masterfile.php?action=campuses`)
             .then(response => {
                 if (response.data && response.data.success) {
-                    this.populateFilter('campusFilter', response.data.data, 'campus_id', 'campus_name');
+                    this.populateFilter('campus-filter', response.data.data, 'campus_id', 'campus_name');
+                    this.populateFilter('forwardCampus', response.data.data, 'campus_id', 'campus_name');
                 }
             })
             .catch(() => console.error('Failed to load campuses'));
@@ -429,27 +251,36 @@ const TableFilters = {
 
     setupEventHandlers: function() {
         // Set up filters to update tables when changed
-        const filters = document.querySelectorAll('.table-filter');
+        const filters = document.querySelectorAll('.filter-control');
         filters.forEach(filter => {
             filter.addEventListener('change', function() {
-                const tableId = this.getAttribute('data-table');
-                const table = $(tableId).DataTable();
+                const columnIndex = parseInt(this.getAttribute('data-column'));
 
-                if (table) {
-                    const columnIndex = parseInt(this.getAttribute('data-column')) || 0;
+                if (!isNaN(columnIndex)) {
+                    const tableIds = ['latestPostsTable', 'resolvedPostsTable'];
+                    let activeTable = null;
 
-                    if (this.value) {
-                        // If using direct value filtering
-                        if (this.hasAttribute('data-value-filter')) {
-                            table.column(columnIndex).search(this.value).draw();
+                    for (const id of tableIds) {
+                        const table = document.getElementById(id);
+                        if (table && $.fn.DataTable.isDataTable(`#${id}`)) {
+                            activeTable = $(`#${id}`).DataTable();
+                            break;
                         }
-                        // If filtering by text content of the selected option
-                        else {
-                            const text = this.options[this.selectedIndex].text;
-                            table.column(columnIndex).search(text).draw();
+                    }
+
+                    if (activeTable) {
+                        if (this.value) {
+                            // For department and campus filters, use the text content instead of value
+                            if (this.id === 'department-filter' || this.id === 'campus-filter') {
+                                const searchValue = this.options[this.selectedIndex].text;
+                                activeTable.column(columnIndex).search(searchValue).draw();
+                            } else {
+                                // For other filters, use the value directly
+                                activeTable.column(columnIndex).search(this.value).draw();
+                            }
+                        } else {
+                            activeTable.column(columnIndex).search('').draw();
                         }
-                    } else {
-                        table.column(columnIndex).search('').draw();
                     }
                 }
             });
@@ -464,12 +295,17 @@ const TableFilters = {
                     if (!filter.disabled) {
                         filter.selectedIndex = 0;
 
-                        const tableId = filter.getAttribute('data-table');
-                        const table = $(tableId).DataTable();
-
-                        if (table) {
-                            const columnIndex = parseInt(filter.getAttribute('data-column')) || 0;
-                            table.column(columnIndex).search('').draw();
+                        const columnIndex = parseInt(filter.getAttribute('data-column'));
+                        if (!isNaN(columnIndex)) {
+                            const tableIds = ['latestPostsTable', 'resolvedPostsTable'];
+                            for (const id of tableIds) {
+                                const table = document.getElementById(id);
+                                if (table && $.fn.DataTable.isDataTable(`#${id}`)) {
+                                    const activeTable = $(`#${id}`).DataTable();
+                                    activeTable.column(columnIndex).search('').draw();
+                                    break;
+                                }
+                            }
                         }
                     }
                 });
@@ -484,23 +320,27 @@ const TableFilters = {
             try {
                 const user = JSON.parse(userInfo);
                 if (user.user_typeId == 5 && user.user_departmentId) {
-                    const departmentFilter = document.getElementById('departmentFilter');
+                    const departmentFilter = document.getElementById('department-filter');
                     if (departmentFilter) {
                         departmentFilter.value = user.user_departmentId;
                         departmentFilter.disabled = true;
 
-                        // Apply this filter to any tables using it
-                        const tableId = departmentFilter.getAttribute('data-table');
-                        const table = $(tableId).DataTable();
-
-                        if (table) {
-                            const columnIndex = parseInt(departmentFilter.getAttribute('data-column')) || 0;
-                            const text = departmentFilter.options[departmentFilter.selectedIndex].text;
-                            table.column(columnIndex).search(text).draw();
+                        // Apply this filter to tables
+                        const tableIds = ['latestPostsTable', 'resolvedPostsTable'];
+                        for (const id of tableIds) {
+                            const table = document.getElementById(id);
+                            if (table && $.fn.DataTable.isDataTable(`#${id}`)) {
+                                const activeTable = $(`#${id}`).DataTable();
+                                const text = departmentFilter.options[departmentFilter.selectedIndex].text;
+                                activeTable.column(4).search(text).draw(); // Department is column 4
+                                break;
+                            }
                         }
                     }
                 }
-            } catch (e) {}
+            } catch (e) {
+                console.error('Error applying user restrictions:', e);
+            }
         }
     }
 };

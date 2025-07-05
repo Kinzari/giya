@@ -13,7 +13,7 @@ const GiyaTable = {
         language: {
             emptyTable: "No data available.",
             zeroRecords: "No matching records found",
-            searchPlaceholder: "Search records...",
+            searchPlaceholder: "Search",
             search: "",
             lengthMenu: "_MENU_ per page",
             paginate: {
@@ -41,7 +41,7 @@ const GiyaTable = {
             $('table.dataTable thead th').css({
                 'background-color': '#155f37',
                 'color': 'white',
-                'text-align': 'left'
+                'text-align': 'center'
             });
 
             GiyaTable.addPageNumberInput(this);
@@ -139,16 +139,6 @@ const GiyaTable = {
                 title: "Type",
                 data: "postType_name",
                 width: "120px"
-            },
-            {
-                title: "Message",
-                data: "post_message",
-                render: function(data) {
-                    if (data && data.length > 15) {
-                        return data.substring(0, 15) + '...';
-                    }
-                    return data || '';
-                }
             },
             {
                 title: "Department",
@@ -723,10 +713,6 @@ GiyaTable.getDefaultColumns = function() {
         {
             title: "Type",
             data: "postType_name",
-        },
-        {
-            title: "Message",
-            data: "post_message",
         },
         {
             title: "Department",

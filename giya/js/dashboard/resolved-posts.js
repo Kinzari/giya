@@ -23,19 +23,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function getEndpoint() {
-        let apiAction = "";
-
-        if (path.includes("visitors-resolved.html")) {
-            apiAction = "get_resolved_visitor_posts";
-        } else if (path.includes("students-resolved.html")) {
-            apiAction = "get_resolved_student_posts";
-        } else if (path.includes("employees-resolved.html")) {
-            apiAction = "get_resolved_employee_posts";
-        } else {
-            apiAction = "get_resolved_posts";
-        }
-
-        return apiAction;
+        // Always use the general resolved posts endpoint since we unified the page
+        return "get_resolved_posts";
     }
 
     function getUserTypeLabel(typeId) {
@@ -88,23 +77,13 @@ document.addEventListener('DOMContentLoaded', function() {
                         if (!record.user_typeId && record.user_schoolId) {
                             const schoolId = record.user_schoolId.toLowerCase();
                             if (schoolId.startsWith('02-')) {
-                                record.user_typeId = 2;
+                                record.user_typeId = 2; // Student
                             } else if (schoolId.startsWith('01-')) {
-                                record.user_typeId = 3;
-                            } else if (schoolId.startsWith('vs-')) {
-                                record.user_typeId = 1;
+                                record.user_typeId = 3; // Faculty
+                            } else if (schoolId.startsWith('VS-')) {
+                                record.user_typeId = 1; // Visitor
                             } else if (schoolId.startsWith('25-')) {
-                                record.user_typeId = endpoint.includes('employee') ? 4 : 5;
-                            }
-                        }
-
-                        if (!record.user_typeId) {
-                            if (endpoint.includes('visitor')) {
-                                record.user_typeId = 1;
-                            } else if (endpoint.includes('student')) {
-                                record.user_typeId = 2;
-                            } else if (endpoint.includes('employee')) {
-                                record.user_typeId = 3;
+                                record.user_typeId = 4; // Employee (default for 25- prefix)
                             }
                         }
                     });
