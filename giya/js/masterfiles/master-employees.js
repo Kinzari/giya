@@ -25,9 +25,9 @@ $(document).ready(function() {
     $('#campusFilter').on('change', function() {
         const campusId = $(this).val();
         if (campusId) {
-            employeesTable.column(5).search($(this).find('option:selected').text()).draw();
+            employeesTable.column(3).search($(this).find('option:selected').text()).draw();
         } else {
-            employeesTable.column(5).search('').draw();
+            employeesTable.column(3).search('').draw();
         }
     });
 
@@ -36,9 +36,9 @@ $(document).ready(function() {
         const status = $(this).val();
         if (status !== '') {
             const statusText = status === '1' ? 'Active' : 'Inactive';
-            employeesTable.column(6).search(statusText).draw();
+            employeesTable.column(4).search(statusText).draw();
         } else {
-            employeesTable.column(6).search('').draw();
+            employeesTable.column(4).search('').draw();
         }
     });
 
@@ -75,8 +75,6 @@ function initEmployeesTable() {
                 }
             },
             { data: 'department_name' },
-            { data: 'user_contact' },
-            { data: 'phinmaed_email' },
             { data: 'campus_name' },
             {
                 data: 'user_status',

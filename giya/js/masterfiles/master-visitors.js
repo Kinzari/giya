@@ -28,8 +28,6 @@ function initVisitorsTable() {
                     );
                 }
             },
-            { data: 'user_email' },
-            { data: 'user_contact' },
             { data: 'campus_name' },
             {
                 data: 'user_status',
