@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 debugInfo.style.display = 'block';
             }
 
-            console.log("Attempting API call to:", apiUrl);
+            // Attempting API call to: " + apiUrl
 
             const response = await axios.get(apiUrl, { timeout: 15000 });
             console.log("API Response:", response.data);

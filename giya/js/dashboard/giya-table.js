@@ -158,17 +158,37 @@ const GiyaTable = {
             },
             {
                 title: "Date",
-                data: "post_date",
-                width: "150px"
-            },
-            {
-                title: "Time",
-                data: "post_time",
+                data: null,
                 width: "150px",
                 render: function(data, type, row) {
-                    const dt = new Date(row.post_date + " " + data);
-                    const options = { hour: 'numeric', minute: '2-digit', hour12: true };
-                    return dt.toLocaleTimeString('en-US', options);
+                    return row.latest_activity_date || row.post_date || '';
+                }
+            },
+            {
+                title: "Time Since Last Activity",
+                data: null,
+                width: "150px",
+                render: function(data, type, row) {
+                    if (typeof getTimeSinceLastActivity === 'function') {
+                        if (row.latest_activity_date && row.latest_activity_time) {
+                            return getTimeSinceLastActivity(row.latest_activity_date, row.latest_activity_time);
+                        } else if (row.last_activity_datetime && typeof getTimeSinceDateTime === 'function') {
+                            return getTimeSinceDateTime(row.last_activity_datetime);
+                        } else if (row.post_date && row.post_time) {
+                            return getTimeSinceLastActivity(row.post_date, row.post_time);
+                        }
+                    }
+                    // Fallback to showing just the time if utility function is not available
+                    if (row.latest_activity_time) {
+                        const dt = new Date((row.latest_activity_date || row.post_date) + " " + row.latest_activity_time);
+                        const options = { hour: 'numeric', minute: '2-digit', hour12: true };
+                        return dt.toLocaleTimeString('en-US', options);
+                    } else if (row.post_time) {
+                        const dt = new Date(row.post_date + " " + row.post_time);
+                        const options = { hour: 'numeric', minute: '2-digit', hour12: true };
+                        return dt.toLocaleTimeString('en-US', options);
+                    }
+                    return 'Unknown';
                 }
             }
         ];
@@ -228,7 +248,7 @@ const GiyaTable = {
             ordering: true,
             info: true,
             paging: true,
-            order: [[6, 'desc'], [7, 'desc']]
+            order: [[6, 'desc'], [7, 'desc']]  // Order by Date then Time Since Last Activity
         };
 
         const defaultsMod = { ...this.defaults };
@@ -244,6 +264,42 @@ const GiyaTable = {
                 'color': 'white',
                 'text-align': 'left'
             });
+
+            // Add post IDs and unread styling to rows
+            const table = $(tableSelector).DataTable();
+
+            $(tableSelector + ' tbody tr').each(function(index) {
+                const rowData = table.row(this).data();
+
+                if (rowData && rowData.post_id) {
+                    // Add post ID as data attribute
+                    $(this).attr('data-post-id', rowData.post_id);
+
+                    // Add bold styling for unread posts
+                    const isUnread = (rowData.is_read_by_admin === 0 || rowData.is_read_by_admin === null || rowData.is_read_by_admin === '0');
+
+                    if (isUnread) {
+                        $(this).css('font-weight', 'bold');
+                        $(this).addClass('unread-post');
+                        $(this).attr('data-unread', 'true');
+                        // Apply to all cells in the row
+                        $(this).find('td').css('font-weight', 'bold');
+                    } else {
+                        $(this).css('font-weight', 'normal');
+                        $(this).removeClass('unread-post');
+                        $(this).attr('data-unread', 'false');
+                        $(this).find('td').css('font-weight', 'normal');
+                    }
+                }
+            });
+
+            // Trigger immediate notification update if NotificationManager exists
+            if (window.notificationManager) {
+                setTimeout(() => {
+                    window.notificationManager.refreshDataTableStyling();
+                    window.notificationManager.forceUpdate();
+                }, 100);
+            }
 
             try {
                 GiyaTable.addPageNumberInput(this);

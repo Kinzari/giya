@@ -195,6 +195,6 @@ function hideMasterFilesForPOC() {
             masterFilesMenu.style.display = 'none';
         }
 
-        console.log('Master Files section hidden for POC user');
+        // Master Files section hidden for POC user
     }
 }

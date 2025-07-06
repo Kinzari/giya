@@ -4,6 +4,14 @@ document.addEventListener('DOMContentLoaded', function() {
         // Continue silently
     }
 
+    // Initialize notifications for this page
+    if (typeof NotificationManager !== 'undefined') {
+        window.notificationManager = new NotificationManager();
+        window.notificationManager.init();
+    }
+
+    // Real-time notifications are handled automatically by real-time-notifications.js
+
     const path = window.location.pathname.toLowerCase();
     const baseURL = typeof getBaseURL === 'function' ? getBaseURL() : sessionStorage.getItem("baseURL");
     if (!baseURL) {
@@ -48,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
         window[`${tableId}_originalHtml`] = originalHtml;
 
         const table = GiyaTable.initPostsTable(`#${tableId}`, action, null, {
-            order: [[7, 'desc'], [8, 'desc']],
+            order: [[6, 'desc'], [7, 'desc']], // Order by Date then Time Since Last Activity
             drawCallback: function(settings) {
                 tableElement.style.display = '';
                 tableElement.style.visibility = 'visible';
@@ -77,7 +85,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (container) {
                     container.innerHTML = window[`${tableId}_originalHtml`];
 
-                    const newTable = GiyaTable.initPostsTable(`#${tableId}`, action);
+                    const newTable = GiyaTable.initPostsTable(`#${tableId}`, action, null, {
+                        order: [[6, 'desc'], [7, 'desc']] // Order by Date then Time Since Last Activity
+                    });
                     window[`${tableId}Table`] = newTable;
                 }
             }

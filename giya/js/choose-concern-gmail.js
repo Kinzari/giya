@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
             inquirySelect.innerHTML = '<option value="">Loading inquiry types...</option>';
 
             const response = await axios.get(buildURL('inquiry.php?action=get_inquiry_types'));
-            console.log('Inquiry types response:', response.data);
+            // Inquiry types response loaded
 
             if (response.data && response.data.success && response.data.types) {
                 // Clear the loading message
@@ -148,8 +148,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 post_type_id: postTypeIdMap[postType] || 1
             };
 
-            console.log('Submitting post with data:', postData);
-            console.log('Selected inquiry type:', selectedInquiryType);
+            // Submitting post with data
+            // Selected inquiry type data ready
 
             const response = await axios.post(buildURL('inquiry.php?action=submit_inquiry'), postData, {
                 headers: {
@@ -799,14 +799,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const replyForm = document.getElementById('replyForm');
 
         // Debug: Log the actual status value
-        console.log('Post status:', submission.post_status, 'Type:', typeof submission.post_status);
+        // Post status check
 
         // Convert status to string for comparison
         const statusStr = String(submission.post_status);
 
         if (statusStr === 'resolved' || statusStr === '2' || statusStr === '3') {
             // Post is already resolved - show read-only mode
-            console.log('Post is resolved - hiding form');
+            // Post is resolved - hiding form
             if (markResolvedBtn) {
                 markResolvedBtn.style.display = 'none';
             }
@@ -820,11 +820,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         <strong>This post is resolved and the conversation is closed.</strong>
                     </div>
                 `;
-                console.log('Replaced form container with resolved message');
+                // Replaced form container with resolved message
             }
         } else {
             // Post is not resolved - normal interactive mode
-            console.log('Post is active - showing form');
+            // Post is active - showing form
             if (markResolvedBtn) {
                 markResolvedBtn.style.display = 'inline-block';
             }

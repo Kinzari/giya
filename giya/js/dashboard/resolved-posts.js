@@ -7,6 +7,14 @@ document.addEventListener('DOMContentLoaded', function() {
         toastr.warning('API URL not found. You may need to login again.');
     }
 
+    // Initialize notifications for this page
+    if (typeof NotificationManager !== 'undefined') {
+        window.notificationManager = new NotificationManager();
+        window.notificationManager.init();
+    }
+
+    // Real-time notifications are handled automatically by real-time-notifications.js
+
     const path = window.location.pathname.toLowerCase();
     const userInfo = sessionStorage.getItem('user');
     let departmentId = null;
@@ -49,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const endpoint = getEndpoint();
 
         const resolvedTable = $('#resolvedPostsTable').DataTable({
-            order: [[6, 'desc'], [7, 'desc']],
+            order: [[7, 'desc'], [8, 'desc']], // Order by Date then Time Since Last Activity
             ajax: {
                 url: `${baseURL}posts.php?action=${endpoint}`,
                 type: 'GET',
@@ -183,20 +191,34 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 {
                     title: "Date",
-                    data: "post_date",
+                    data: "latest_activity_date",
                     width: "100px"
                 },
                 {
-                    title: "Time",
-                    data: "post_time",
-                    width: "100px",
+                    title: "Time Since Last Activity",
+                    data: null,
+                    width: "150px",
                     render: function(data, type, row) {
-                        if (data && row.post_date) {
-                            const dt = new Date(row.post_date + " " + data);
+                        if (typeof getTimeSinceLastActivity === 'function') {
+                            if (row.latest_activity_date && row.latest_activity_time) {
+                                return getTimeSinceLastActivity(row.latest_activity_date, row.latest_activity_time);
+                            } else if (row.last_activity_datetime && typeof getTimeSinceDateTime === 'function') {
+                                return getTimeSinceDateTime(row.last_activity_datetime);
+                            } else if (row.post_date && row.post_time) {
+                                return getTimeSinceLastActivity(row.post_date, row.post_time);
+                            }
+                        }
+                        // Fallback to showing just the time if utility function is not available
+                        if (row.latest_activity_time) {
+                            const dt = new Date((row.latest_activity_date || row.post_date) + " " + row.latest_activity_time);
+                            const options = { hour: 'numeric', minute: '2-digit', hour12: true };
+                            return dt.toLocaleTimeString('en-US', options);
+                        } else if (row.post_time) {
+                            const dt = new Date(row.post_date + " " + row.post_time);
                             const options = { hour: 'numeric', minute: '2-digit', hour12: true };
                             return dt.toLocaleTimeString('en-US', options);
                         }
-                        return data || '';
+                        return 'Unknown';
                     }
                 }
             ],
