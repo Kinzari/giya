@@ -48,6 +48,23 @@ table.dataTable thead th,
     color: white !important;
 }
 
+/* Unread post styling - important to override other styles */
+.dataTable tbody tr.unread-post,
+.dataTable tbody tr[data-unread="true"],
+table.dataTable tbody tr.unread-post,
+tbody tr.unread-post,
+tr.unread-post {
+    font-weight: bold !important;
+}
+
+.dataTable tbody tr.unread-post td,
+.dataTable tbody tr[data-unread="true"] td,
+table.dataTable tbody tr.unread-post td,
+tbody tr.unread-post td,
+tr.unread-post td {
+    font-weight: bold !important;
+}
+
 .table.table-hover.border-0 tbody td,
 .table.table-hover tbody td,
 .dataTable tbody td {
