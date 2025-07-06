@@ -1,14 +1,17 @@
 <?php
 require 'db_connection.php';
 
-class InquiryHandler {
+class InquiryHandler
+{
     private $pdo;
 
-    public function __construct($pdo) {
+    public function __construct($pdo)
+    {
         $this->pdo = $pdo;
     }
 
-    public function submitInquiry($data) {
+    public function submitInquiry($data)
+    {
         if (empty($data['user_id'])) {
             return ["success" => false, "message" => "User ID is required"];
         }
@@ -48,7 +51,8 @@ class InquiryHandler {
                     post_title,
                     post_message,
                     post_status,
-                    inquiry_typeId
+                    inquiry_typeId,
+                    is_read_by_admin
                 ) VALUES (
                     :userId,
                     :deptId,
@@ -59,7 +63,8 @@ class InquiryHandler {
                     :title,
                     :message,
                     0,
-                    :inquiryId
+                    :inquiryId,
+                    0
                 )
             ";
             $insertStmt = $this->pdo->prepare($insertSql);
@@ -86,7 +91,8 @@ class InquiryHandler {
         }
     }
 
-    public function checkPrivacyPolicy($userId) {
+    public function checkPrivacyPolicy($userId)
+    {
         try {
             $stmt = $this->pdo->prepare("
                 SELECT privacy_policy_check
@@ -118,7 +124,8 @@ class InquiryHandler {
         }
     }
 
-    public function updatePrivacyPolicy($userId, $status) {
+    public function updatePrivacyPolicy($userId, $status)
+    {
         try {
             $stmt = $this->pdo->prepare("
                 UPDATE tblusers
@@ -140,7 +147,8 @@ class InquiryHandler {
         }
     }
 
-    public function getInquiryTypes() {
+    public function getInquiryTypes()
+    {
         try {
             $stmt = $this->pdo->prepare("
                 SELECT DISTINCT inquiry_id, inquiry_type, description, department_id
@@ -163,7 +171,8 @@ class InquiryHandler {
         }
     }
 
-    public function ping() {
+    public function ping()
+    {
         return [
             "success" => true,
             "message" => "API is working",

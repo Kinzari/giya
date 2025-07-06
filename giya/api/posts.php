@@ -77,6 +77,7 @@ class PostsHandler
                     p.post_time,
                     p.post_status,
                     p.post_campusId,
+                    COALESCE(p.is_read_by_admin, 0) as is_read_by_admin,
                     pt.postType_name,
                     u.user_id,
                     u.user_status,
@@ -116,7 +117,7 @@ class PostsHandler
             ];
         }
     }
-    
+
 
     public function handleMarkPostRead($postId)
     {
@@ -124,7 +125,8 @@ class PostsHandler
             return ["success" => false, "message" => "No post ID."];
         }
         try {
-            $stmt = $this->pdo->prepare("UPDATE tbl_giya_posts SET post_status = 1 WHERE post_id = ? AND post_status = 0");
+            // Update notification read status instead of post status
+            $stmt = $this->pdo->prepare("UPDATE tbl_giya_posts SET is_read_by_admin = 1 WHERE post_id = ?");
             $stmt->execute([$postId]);
             return ["success" => true, "message" => "Post marked as read"];
         } catch (\PDOException $e) {
@@ -752,7 +754,31 @@ class PostsHandler
                     i.inquiry_type,
                     fb.user_firstname as forwarded_by_firstname,
                     fb.user_lastname as forwarded_by_lastname,
-                    CONCAT(fb.user_firstname, ' ', fb.user_lastname) as forwarded_by_name
+                    CONCAT(fb.user_firstname, ' ', fb.user_lastname) as forwarded_by_name,
+                    COALESCE(
+                        (SELECT MAX(CONCAT(r.reply_date, ' ', r.reply_time))
+                         FROM tbl_giya_reply r
+                         WHERE r.reply_postId = p.post_id),
+                        CONCAT(p.post_date, ' ', p.post_time)
+                    ) as last_activity_datetime,
+                    CASE
+                        WHEN EXISTS(SELECT 1 FROM tbl_giya_reply r WHERE r.reply_postId = p.post_id) THEN
+                            (SELECT DATE_FORMAT(r.reply_date, '%m-%d-%Y')
+                             FROM tbl_giya_reply r
+                             WHERE r.reply_postId = p.post_id
+                             ORDER BY r.reply_date DESC, r.reply_time DESC
+                             LIMIT 1)
+                        ELSE DATE_FORMAT(p.post_date, '%m-%d-%Y')
+                    END as latest_activity_date,
+                    CASE
+                        WHEN EXISTS(SELECT 1 FROM tbl_giya_reply r WHERE r.reply_postId = p.post_id) THEN
+                            (SELECT r.reply_time
+                             FROM tbl_giya_reply r
+                             WHERE r.reply_postId = p.post_id
+                             ORDER BY r.reply_date DESC, r.reply_time DESC
+                             LIMIT 1)
+                        ELSE p.post_time
+                    END as latest_activity_time
                 FROM tbl_giya_posts p
                 JOIN tblusers u ON p.post_userId = u.user_id
                 JOIN tbl_giya_posttype t ON p.postType_id = t.postType_id
@@ -762,7 +788,7 @@ class PostsHandler
                 LEFT JOIN tblusers fb ON p.forwarded_by = fb.user_id
                 WHERE p.post_departmentId = ?
                 AND p.is_forwarded = 1
-                ORDER BY p.post_date DESC, p.post_time DESC
+                ORDER BY last_activity_datetime DESC
             ");
             $stmt->execute([$departmentId]);
             $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -1035,7 +1061,31 @@ class PostsHandler
                 CONCAT(u.user_firstname, ' ', u.user_lastname) as user_fullname,
                 u.user_schoolId, u.user_typeId, ut.user_type,
                 d.department_name, c.campus_name,
-                i.inquiry_type
+                i.inquiry_type,
+                COALESCE(
+                    (SELECT MAX(CONCAT(r.reply_date, ' ', r.reply_time))
+                     FROM tbl_giya_reply r
+                     WHERE r.reply_postId = p.post_id),
+                    CONCAT(p.post_date, ' ', p.post_time)
+                ) as last_activity_datetime,
+                CASE
+                    WHEN EXISTS(SELECT 1 FROM tbl_giya_reply r WHERE r.reply_postId = p.post_id) THEN
+                        (SELECT DATE_FORMAT(r.reply_date, '%m-%d-%Y')
+                         FROM tbl_giya_reply r
+                         WHERE r.reply_postId = p.post_id
+                         ORDER BY r.reply_date DESC, r.reply_time DESC
+                         LIMIT 1)
+                    ELSE DATE_FORMAT(p.post_date, '%m-%d-%Y')
+                END as latest_activity_date,
+                CASE
+                    WHEN EXISTS(SELECT 1 FROM tbl_giya_reply r WHERE r.reply_postId = p.post_id) THEN
+                        (SELECT r.reply_time
+                         FROM tbl_giya_reply r
+                         WHERE r.reply_postId = p.post_id
+                         ORDER BY r.reply_date DESC, r.reply_time DESC
+                         LIMIT 1)
+                    ELSE p.post_time
+                END as latest_activity_time
                 FROM tbl_giya_posts p
                 JOIN tblusers u ON p.post_userId = u.user_id
                 JOIN tblusertype ut ON u.user_typeId = ut.user_typeId
@@ -1052,7 +1102,7 @@ class PostsHandler
                 $params[] = $departmentId;
             }
 
-            $query .= " ORDER BY p.post_date DESC, p.post_time DESC";
+            $query .= " ORDER BY last_activity_datetime DESC";
 
             $stmt = $this->pdo->prepare($query);
             $stmt->execute($params);
@@ -1329,6 +1379,7 @@ class PostsHandler
                     p.post_status,
                     p.post_campusId,
                     p.is_forwarded,
+                    COALESCE(p.is_read_by_admin, 0) as is_read_by_admin,
                     pt.postType_name,
                     u.user_id,
                     u.user_status,
@@ -1336,7 +1387,31 @@ class PostsHandler
                     CONCAT(u.user_firstname, ' ', u.user_lastname) AS user_fullname,
                     u.user_schoolId,
                     cp.campus_name,
-                    COALESCE(d2.department_name, d1.department_name, 'Not Assigned') as department_name
+                    COALESCE(d2.department_name, d1.department_name, 'Not Assigned') as department_name,
+                    COALESCE(
+                        (SELECT MAX(CONCAT(r.reply_date, ' ', r.reply_time))
+                         FROM tbl_giya_reply r
+                         WHERE r.reply_postId = p.post_id),
+                        CONCAT(p.post_date, ' ', p.post_time)
+                    ) as last_activity_datetime,
+                    CASE
+                        WHEN EXISTS(SELECT 1 FROM tbl_giya_reply r WHERE r.reply_postId = p.post_id) THEN
+                            (SELECT DATE_FORMAT(r.reply_date, '%m-%d-%Y')
+                             FROM tbl_giya_reply r
+                             WHERE r.reply_postId = p.post_id
+                             ORDER BY r.reply_date DESC, r.reply_time DESC
+                             LIMIT 1)
+                        ELSE DATE_FORMAT(p.post_date, '%m-%d-%Y')
+                    END as latest_activity_date,
+                    CASE
+                        WHEN EXISTS(SELECT 1 FROM tbl_giya_reply r WHERE r.reply_postId = p.post_id) THEN
+                            (SELECT r.reply_time
+                             FROM tbl_giya_reply r
+                             WHERE r.reply_postId = p.post_id
+                             ORDER BY r.reply_date DESC, r.reply_time DESC
+                             LIMIT 1)
+                        ELSE p.post_time
+                    END as latest_activity_time
                 FROM tbl_giya_posts p
                 JOIN tblusers u ON p.post_userId = u.user_id
                 JOIN tbl_giya_posttype pt ON p.postType_id = pt.postType_id
@@ -1349,10 +1424,11 @@ class PostsHandler
             // POC users should only see posts that have been forwarded to their department
             if ($userTypeId == 5 && $userDepartmentId) {
                 $query .= " AND (p.is_forwarded = 1 AND p.post_departmentId = ?)";
+                $query .= " ORDER BY last_activity_datetime DESC";
                 $stmt = $this->pdo->prepare($query);
                 $stmt->execute([$userDepartmentId]);
             } else {
-                $query .= " ORDER BY p.post_date DESC, p.post_time DESC";
+                $query .= " ORDER BY last_activity_datetime DESC";
                 $stmt = $this->pdo->prepare($query);
                 $stmt->execute();
             }
@@ -1373,6 +1449,144 @@ class PostsHandler
                 "recordsFiltered" => 0,
                 "data" => [],
                 "error" => $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Get notification counts for dashboard sidebar
+     */
+    public function getNotificationCounts($userTypeId = null, $departmentId = null) {
+        try {
+            $activePosts = 0;
+            $resolvedPosts = 0;
+
+            // Count unread active posts with optimized query
+            $activeQuery = "
+                SELECT COUNT(*) as count
+                FROM tbl_giya_posts p
+                WHERE p.post_status IN (0, 1)
+                AND COALESCE(p.is_read_by_admin, 0) = 0
+            ";
+
+            $params = [];
+            if ($userTypeId == 5 && $departmentId) {
+                $activeQuery .= " AND p.post_departmentId = ?";
+                $params[] = $departmentId;
+            }
+
+            $stmt = $this->pdo->prepare($activeQuery);
+            $stmt->execute($params);
+            $activePosts = $stmt->fetchColumn();
+
+            // Count unread resolved posts with simpler query
+            $resolvedQuery = "
+                SELECT COUNT(*) as count
+                FROM tbl_giya_posts p
+                WHERE p.post_status = 2
+                AND COALESCE(p.is_read_by_admin, 0) = 0
+            ";
+
+            $params = [];
+            if ($userTypeId == 5 && $departmentId) {
+                $resolvedQuery .= " AND p.post_departmentId = ?";
+                $params[] = $departmentId;
+            }
+
+            $stmt = $this->pdo->prepare($resolvedQuery);
+            $stmt->execute($params);
+            $resolvedPosts = $stmt->fetchColumn();
+
+            return [
+                'success' => true,
+                'data' => [
+                    'active_posts' => (int)$activePosts,
+                    'resolved_posts' => (int)$resolvedPosts,
+                    'total' => (int)($activePosts + $resolvedPosts)
+                ]
+            ];
+        } catch (\PDOException $e) {
+            error_log("Error in getNotificationCounts: " . $e->getMessage());
+            return [
+                'success' => false,
+                'message' => 'Database error: ' . $e->getMessage(),
+                'data' => [
+                    'active_posts' => 0,
+                    'resolved_posts' => 0,
+                    'total' => 0
+                ]
+            ];
+        }
+    }
+
+    /**
+     * Mark a post as read by admin
+     */
+    public function markPostAsRead($postId) {
+        try {
+            $stmt = $this->pdo->prepare("
+                UPDATE tbl_giya_posts
+                SET is_read_by_admin = 1
+                WHERE post_id = ?
+            ");
+            $stmt->execute([$postId]);
+
+            return [
+                'success' => true,
+                'message' => 'Post marked as read'
+            ];
+        } catch (\PDOException $e) {
+            return [
+                'success' => false,
+                'message' => 'Database error: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Mark all posts as read by type and user department
+     */
+    public function markAllAsRead($type, $userTypeId = null, $departmentId = null) {
+        try {
+            $whereConditions = [];
+            $params = [];
+
+            // Filter by post type
+            if ($type === 'active') {
+                $whereConditions[] = "post_status IN (0, 1)";
+            } elseif ($type === 'resolved') {
+                $whereConditions[] = "post_status = 2";
+            }
+
+            // Filter by department for POC users
+            if ($userTypeId == 5 && $departmentId) {
+                $whereConditions[] = "is_forwarded = 1 AND post_departmentId = ?";
+                $params[] = $departmentId;
+            }
+
+            // Only update unread posts
+            $whereConditions[] = "(is_read_by_admin = 0 OR is_read_by_admin IS NULL)";
+
+            $whereClause = implode(' AND ', $whereConditions);
+
+            $stmt = $this->pdo->prepare("
+                UPDATE tbl_giya_posts
+                SET is_read_by_admin = 1
+                WHERE $whereClause
+            ");
+            $stmt->execute($params);
+
+            $affectedRows = $stmt->rowCount();
+
+            return [
+                'success' => true,
+                'message' => "Marked $affectedRows posts as read",
+                'affected_rows' => $affectedRows
+            ];
+        } catch (\PDOException $e) {
+            return [
+                'success' => false,
+                'message' => 'Database error: ' . $e->getMessage()
             ];
         }
     }
@@ -1555,6 +1769,29 @@ if (isset($_GET['action'])) {
                     "message" => "Server error: " . $e->getMessage()
                 ]);
             }
+            break;
+
+        case 'mark_all_read':
+            $data = json_decode(file_get_contents("php://input"), true);
+            $type = $data['type'] ?? null;
+            $userTypeId = $data['user_type'] ?? null;
+            $departmentId = $data['department_id'] ?? null;
+
+            if (!$type) {
+                outputJSON(['success' => false, 'message' => 'Type is required (active or resolved)']);
+                break;
+            }
+
+            $response = $handler->markAllAsRead($type, $userTypeId, $departmentId);
+            outputJSON($response);
+            break;
+
+        case 'get_notification_counts':
+            $headers = getallheaders();
+            $userTypeId = isset($headers['X-User-Type']) ? $headers['X-User-Type'] : null;
+            $userDepartmentId = isset($headers['X-User-Department']) ? $headers['X-User-Department'] : null;
+            $response = $handler->getNotificationCounts($userTypeId, $userDepartmentId);
+            outputJSON($response);
             break;
 
         default:

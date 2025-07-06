@@ -155,7 +155,7 @@ switch ($action) {
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
             $visitorCount = $result['count'] + 1;
 
-            $schoolId = sprintf("vs-2526-%05d", $visitorCount);
+            $schoolId = sprintf("VS-2526-%05d", $visitorCount);
 
             $first_name = isset($data['first_name']) ? trim($data['first_name']) : null;
             $middle_name = isset($data['middle_name']) ? trim($data['middle_name']) : null;
