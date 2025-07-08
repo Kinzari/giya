@@ -3,8 +3,8 @@ const options = { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'A
 const formattedTime = now.toLocaleTimeString('en-US', options);
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // Get baseURL from sessionStorage
-    const baseURL = sessionStorage.getItem("baseURL");
+    // Get baseURL using centralized session storage
+    const baseURL = GiyaSession.get(GIYA_SESSION_KEYS.BASE_URL);
     if (!baseURL) {
         window.location.href = 'index.html';
         return;
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Make baseURL available globally for other functions
     window.baseURL = baseURL;
 
-    const selectedPostType = sessionStorage.getItem('selectedPostType') || 'inquiry';
+    const selectedPostType = GiyaSession.get(GIYA_SESSION_KEYS.SELECTED_POST_TYPE, 'inquiry');
 
     document.getElementById('selectedPostType').value = selectedPostType;
     const concernTypeLabel = document.getElementById('concernTypeLabel');
