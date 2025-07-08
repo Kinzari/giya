@@ -1,6 +1,6 @@
 $(document).ready(function() {
     const baseURL = getBaseURL();
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
     let faqTable;
 
     // Initialize DataTable
