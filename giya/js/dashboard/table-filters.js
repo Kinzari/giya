@@ -42,16 +42,15 @@ async function forwardCurrentPost() {
             return;
         }
 
-        const userInfo = sessionStorage.getItem('user');
-        if (!userInfo) {
+        const userData = GiyaSession.getUserData();
+        if (!userData.user_id) {
             toastr.error('User information not found. Please log in again.');
             return;
         }
 
-        const user = JSON.parse(userInfo);
-        const forwardedBy = user.user_id;
+        const forwardedBy = userData.user_id;
 
-        const baseURL = typeof getBaseURL === 'function' ? getBaseURL() : sessionStorage.getItem('baseURL');
+        const baseURL = GiyaSession.get(GIYA_SESSION_KEYS.BASE_URL);
         if (!baseURL) {
             toastr.error('Base URL not found. Please login again.');
             return;
@@ -102,22 +101,16 @@ const TableFilters = {
     },
 
     checkPOCRestrictions: function() {
-        const userInfo = sessionStorage.getItem('user');
-        if (!userInfo) return;
+        const userData = GiyaSession.getUserData();
+        if (!userData.user_id) return;
 
-        try {
-            const user = JSON.parse(userInfo);
-
-            if (user.user_typeId == 5) {
-                this.applyPOCLocks(user);
-            }
-        } catch (e) {
-            console.error('Error applying POC restrictions:', e);
+        if (userData.user_typeId == 5) {
+            this.applyPOCLocks(userData);
         }
     },
 
-    applyPOCLocks: function(user) {
-        if (user.user_departmentId) {
+    applyPOCLocks: function(userData) {
+        if (userData.user_departmentId) {
             const departmentFilter = document.getElementById('department-filter');
             if (departmentFilter) {
                 departmentFilter.value = user.user_departmentId;
@@ -188,7 +181,7 @@ const TableFilters = {
     },
 
     loadFilterOptions: function() {
-        const baseURL = typeof getBaseURL === 'function' ? getBaseURL() : sessionStorage.getItem('baseURL');
+        const baseURL = GiyaSession.get(GIYA_SESSION_KEYS.BASE_URL);
         if (!baseURL) {
             toastr.warning('Base URL not found. Please login again.');
             return;
@@ -236,15 +229,10 @@ const TableFilters = {
 
         // Check if we need to pre-select an option for POC users
         if (filterId === 'departmentFilter') {
-            const userInfo = sessionStorage.getItem('user');
-            if (userInfo) {
-                try {
-                    const user = JSON.parse(userInfo);
-                    if (user.user_typeId == 5 && user.user_departmentId) {
-                        filter.value = user.user_departmentId;
-                        filter.disabled = true;
-                    }
-                } catch (e) {}
+            const userData = GiyaSession.getUserData();
+            if (userData.user_id && userData.user_typeId == 5 && userData.user_departmentId) {
+                filter.value = userData.user_departmentId;
+                filter.disabled = true;
             }
         }
     },
@@ -315,31 +303,24 @@ const TableFilters = {
 
     applyUserRestrictions: function() {
         // Add restrictions based on user type (e.g., for POC users)
-        const userInfo = sessionStorage.getItem('user');
-        if (userInfo) {
-            try {
-                const user = JSON.parse(userInfo);
-                if (user.user_typeId == 5 && user.user_departmentId) {
-                    const departmentFilter = document.getElementById('department-filter');
-                    if (departmentFilter) {
-                        departmentFilter.value = user.user_departmentId;
-                        departmentFilter.disabled = true;
+        const userData = GiyaSession.getUserData();
+        if (userData.user_id && userData.user_typeId == 5 && userData.user_departmentId) {
+            const departmentFilter = document.getElementById('department-filter');
+            if (departmentFilter) {
+                departmentFilter.value = userData.user_departmentId;
+                departmentFilter.disabled = true;
 
-                        // Apply this filter to tables
-                        const tableIds = ['latestPostsTable', 'resolvedPostsTable'];
-                        for (const id of tableIds) {
-                            const table = document.getElementById(id);
-                            if (table && $.fn.DataTable.isDataTable(`#${id}`)) {
-                                const activeTable = $(`#${id}`).DataTable();
-                                const text = departmentFilter.options[departmentFilter.selectedIndex].text;
-                                activeTable.column(4).search(text).draw(); // Department is column 4
-                                break;
-                            }
-                        }
+                // Apply this filter to tables
+                const tableIds = ['latestPostsTable', 'resolvedPostsTable'];
+                for (const id of tableIds) {
+                    const table = document.getElementById(id);
+                    if (table && $.fn.DataTable.isDataTable(`#${id}`)) {
+                        const activeTable = $(`#${id}`).DataTable();
+                        const text = departmentFilter.options[departmentFilter.selectedIndex].text;
+                        activeTable.column(4).search(text).draw(); // Department is column 4
+                        break;
                     }
                 }
-            } catch (e) {
-                console.error('Error applying user restrictions:', e);
             }
         }
     }
