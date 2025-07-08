@@ -170,8 +170,8 @@ function setupEventHandlers() {
 }
 
 function showVisitorDetails(visitorId) {
-    const baseURL = sessionStorage.getItem('baseURL');
-    const userType = sessionStorage.getItem('user_typeId');
+    const baseURL = GiyaSession.get(GIYA_SESSION_KEYS.BASE_URL);
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
 
     $.ajax({
         url: `${baseURL}masterfile.php?action=get_visitor`,
@@ -246,7 +246,7 @@ function showVisitorDetails(visitorId) {
 
 function editVisitor(visitorId) {
     const baseURL = getBaseURL();
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
 
     $.ajax({
         url: `${baseURL}masterfile.php?action=get_visitor`,
@@ -293,7 +293,7 @@ function editVisitor(visitorId) {
 
 function saveVisitor() {
     const baseURL = getBaseURL();
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
     const formData = {
         mode: $('#visitorForm').data('mode') || 'add',
         id: $('#visitorForm').data('id'),
@@ -348,7 +348,7 @@ function deleteVisitor(visitorId) {
     }).then((result) => {
         if (result.isConfirmed) {
             const baseURL = getBaseURL();
-            const userType = sessionStorage.getItem('user_typeId');
+            const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
 
             $.ajax({
                 url: `${baseURL}masterfile.php?action=visitor_delete`,
@@ -384,7 +384,7 @@ function deleteVisitor(visitorId) {
 
 function toggleVisitorStatus(visitorId, isActive) {
     const baseURL = getBaseURL();
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
 
     $.ajax({
         url: `${baseURL}masterfile.php?action=toggle_visitor_status`,
@@ -413,7 +413,7 @@ function toggleVisitorStatus(visitorId, isActive) {
 
 function resetVisitorPassword(visitorId) {
     const baseURL = getBaseURL();
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
 
     $.ajax({
         url: `${baseURL}giya.php?action=reset_password`,
@@ -489,8 +489,8 @@ function validateVisitorForm() {
 }
 
 function loadCampusDropdown(selectId, selectedId = null) {
-    const userType = sessionStorage.getItem('user_typeId');
-    const baseURL = sessionStorage.getItem('baseURL');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
+    const baseURL = GiyaSession.get(GIYA_SESSION_KEYS.BASE_URL);
 
     $.ajax({
         url: `${baseURL}giya.php?action=get_campuses`,
