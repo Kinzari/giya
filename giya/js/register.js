@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-
-    const baseURL = sessionStorage.getItem("baseURL");
-    if (!baseURL) {
+    // Check if GIYA URL is configured
+    const giyaURL = getGiyaURL();
+    if (!giyaURL) {
         window.location.href = 'index.html';
         return;
     }
@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", function () {
         };
 
         try {
-            const response = await axios.post(`${baseURL}giya.php?action=register`, userData, {
+            const response = await axios.post(`${getGiyaURL()}giya.php?action=register`, userData, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
