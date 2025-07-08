@@ -193,17 +193,17 @@ const GiyaTable = {
             }
         ];
 
-        // const baseURL = sessionStorage.baseURL;
-        const baseURL = sessionStorage.getItem('baseURL');
+        // Use centralized session management
+        const baseURL = GiyaSession.get(GIYA_SESSION_KEYS.BASE_URL);
 
-        const userTypeId = sessionStorage.getItem('user_typeId');
-        const userDepartmentId = sessionStorage.getItem('user_departmentId');
+        const userTypeId = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
+        const userDepartmentId = GiyaSession.get(GIYA_SESSION_KEYS.USER_DEPARTMENT_ID);
 
         if (!window.tableData) window.tableData = {};
 
         const staticConfig = {
             ajax: {
-                url: `${baseURL}posts.php?action=${action}`,
+                url: `${baseURL || ''}posts.php?action=${action}`,
                 type: 'GET',
                 dataType: 'json',
                 cache: false,
@@ -358,10 +358,10 @@ const GiyaTable = {
 
                             $(tableSelector).DataTable({
                                 ajax: {
-                                    url: `${baseURL}posts.php?action=${action}`,
+                                    url: `${GiyaSession.get(GIYA_SESSION_KEYS.BASE_URL) || ''}posts.php?action=${action}`,
                                     headers: {
-                                        'X-User-Type': userTypeId || '',
-                                        'X-User-Department': userDepartmentId || ''
+                                        'X-User-Type': GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID) || '',
+                                        'X-User-Department': GiyaSession.get(GIYA_SESSION_KEYS.USER_DEPARTMENT_ID) || ''
                                     }
                                 },
                                 columns: columns
@@ -679,8 +679,8 @@ $(document).ready(function() {
 
     function getPostsAction() {
         const path = window.location.pathname.toLowerCase();
-        const userTypeId = window.userTypeId || sessionStorage.getItem('user_typeId');
-        const departmentId = window.departmentId || sessionStorage.getItem('user_departmentId');
+        const userTypeId = window.userTypeId || GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
+        const departmentId = window.departmentId || GiyaSession.get(GIYA_SESSION_KEYS.USER_DEPARTMENT_ID);
 
         if (path.includes('students.html')) {
             return (userTypeId == 5 && departmentId) ?
