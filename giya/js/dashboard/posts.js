@@ -13,32 +13,28 @@ document.addEventListener('DOMContentLoaded', function() {
     // Real-time notifications are handled automatically by real-time-notifications.js
 
     const path = window.location.pathname.toLowerCase();
-    const baseURL = typeof getBaseURL === 'function' ? getBaseURL() : sessionStorage.getItem("baseURL");
+    const baseURL = GiyaSession.get(GIYA_SESSION_KEYS.BASE_URL);
     if (!baseURL) {
         toastr.warning('API URL not found. You may need to login again.');
     }
 
     let userTypeId = null;
     let departmentId = null;
-    const userInfo = sessionStorage.getItem('user');
+    const userData = GiyaSession.getUserData();
 
-    if (userInfo) {
-        try {
-            const user = JSON.parse(userInfo);
-            departmentId = user.user_departmentId;
-            userTypeId = user.user_typeId;
+    if (userData.user_id) {
+        departmentId = userData.user_departmentId;
+        userTypeId = userData.user_typeId;
 
-            window.userTypeId = userTypeId;
-            window.departmentId = departmentId;
+        window.userTypeId = userTypeId;
+        window.departmentId = departmentId;
 
-            sessionStorage.setItem('user_typeId', userTypeId);
-            sessionStorage.setItem('user_departmentId', departmentId);
+        // Still set these for backward compatibility with other code
+        GiyaSession.set(GIYA_SESSION_KEYS.USER_TYPE_ID, userTypeId);
+        GiyaSession.set(GIYA_SESSION_KEYS.USER_DEPARTMENT_ID, departmentId);
 
-            if (userTypeId == 5 && !departmentId) {
-                toastr.warning('Department ID not found in your profile. Please contact the administrator.');
-            }
-        } catch (e) {
-            // Handle error silently
+        if (userTypeId == 5 && !departmentId) {
+            toastr.warning('Department ID not found in your profile. Please contact the administrator.');
         }
     }
 
@@ -161,7 +157,7 @@ function renderStatusBadge(data) {
 
 async function safeApiCall(endpoint, options = {}) {
     try {
-        const baseURL = typeof getBaseURL === 'function' ? getBaseURL() : sessionStorage.getItem('baseURL') || '';
+        const baseURL = GiyaSession.get(GIYA_SESSION_KEYS.BASE_URL);
         const response = await axios.get(`${baseURL}${endpoint}`, options);
         return response.data;
     } catch (error) {
