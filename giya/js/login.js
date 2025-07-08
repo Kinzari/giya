@@ -1,5 +1,5 @@
-sessionStorage.setItem("baseURL", "http://localhost/api/");
-// sessionStorage.setItem("baseURL", "https://coc-studentinfo.net/giya/");
+GiyaSession.set(GIYA_SESSION_KEYS.BASE_URL, GIYA_CONFIG.getBaseURL());
+// Alternative production URL: GiyaSession.set(GIYA_SESSION_KEYS.BASE_URL, GIYA_CONFIG.URLS.PRODUCTION);
 
 
 document
@@ -35,7 +35,7 @@ document
 
         try {
             const response = await axios.post(
-                `${sessionStorage.getItem("baseURL")}giya.php?action=login`,
+                `${GiyaSession.get(GIYA_SESSION_KEYS.BASE_URL)}giya.php?action=login`,
                 {
                     loginInput: loginInput,
                     password: password,
@@ -45,38 +45,11 @@ document
             const result = response.data;
 
             if (result.success) {
-                const baseURL = sessionStorage.getItem("baseURL");
-                sessionStorage.clear();
-                sessionStorage.setItem("baseURL", baseURL);
+                // Clear session storage but preserve base URL
+                GiyaSession.clearExceptBaseURL();
 
-                const sessionData = {
-                    user_id: result.user_id,
-                    user_schoolId: result.user_schoolId,
-                    user_firstname: result.user_firstname,
-                    user_middlename: result.user_middlename,
-                    user_lastname: result.user_lastname,
-                    user_suffix: result.user_suffix,
-                    department_name: result.department_name,
-                    user_departmentId: result.user_departmentId,
-                    course_name: result.course_name,
-                    user_schoolyearId: result.user_schoolyearId,
-                    phinmaed_email: result.phinmaed_email,
-                    user_contact: result.user_contact,
-                    user_typeId: result.user_typeId,
-                    user_email: result.user_email
-                };
-
-
-                Object.entries(sessionData).forEach(([key, value]) => {
-                    sessionStorage.setItem(key, value);
-                });
-
-
-                sessionStorage.setItem("user", JSON.stringify(result));
-
-
-                sessionStorage.setItem("isPOC", result.user_typeId === 5 ? "true" : "false");
-                sessionStorage.setItem("isAdmin", result.user_typeId === 6 ? "true" : "false");
+                // Set all user data using centralized method
+                GiyaSession.setUserData(result);
 
                 const userTypeId = parseInt(result.user_typeId);
 
@@ -175,8 +148,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             try {
-                // Use the already set baseURL instead of setting it again
-                const baseURL = sessionStorage.getItem('baseURL');
+                // Use the centralized base URL
+                const baseURL = GiyaSession.get(GIYA_SESSION_KEYS.BASE_URL);
 
                 const response = await axios.post(`${baseURL}giya.php?action=login`, {
                     loginInput: loginInput,
@@ -184,13 +157,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
 
                 if (response.data.success) {
-                    // Store user data in sessionStorage
-                    sessionStorage.setItem('user_id', response.data.user_id);
-                    sessionStorage.setItem('user_schoolId', response.data.user_schoolId);
-                    sessionStorage.setItem('user_firstname', response.data.user_firstname);
-                    sessionStorage.setItem('user_lastname', response.data.user_lastname);
-                    sessionStorage.setItem('user_typeId', response.data.user_typeId);
-                    sessionStorage.setItem('user', JSON.stringify(response.data));
+                    // Store user data using centralized session storage
+                    GiyaSession.setUserData(response.data);
 
                     // Redirect based on user type
                     if (response.data.user_typeId == 5 || response.data.user_typeId == 6) {
