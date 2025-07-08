@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Use the getBaseURL function from config.js
-    const baseURL = typeof getBaseURL === 'function' ? getBaseURL() : sessionStorage.getItem('baseURL');
+    // Use centralized base URL management
+    const baseURL = GiyaSession.get(GIYA_SESSION_KEYS.BASE_URL);
 
     if (!baseURL) {
         // Don't set a new baseURL, just warn the user
@@ -16,18 +16,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Real-time notifications are handled automatically by real-time-notifications.js
 
     const path = window.location.pathname.toLowerCase();
-    const userInfo = sessionStorage.getItem('user');
+    const userData = GiyaSession.getUserData();
     let departmentId = null;
     let userTypeId = null;
 
-    if (userInfo) {
-        try {
-            const user = JSON.parse(userInfo);
-            departmentId = user.user_departmentId;
-            userTypeId = user.user_typeId;
-        } catch (e) {
-            // Parse error
-        }
+    if (userData && userData.user_id) {
+        departmentId = userData.user_departmentId;
+        userTypeId = userData.user_typeId;
     }
 
     function getEndpoint() {
@@ -260,8 +255,8 @@ document.addEventListener('DOMContentLoaded', function() {
     window.showResolvedPostDetails = async function(postId) {
         try {
             currentPostId = postId;
-            // Use getBaseURL function if available
-            const baseURL = typeof getBaseURL === 'function' ? getBaseURL() : sessionStorage.getItem('baseURL');
+            // Use centralized base URL management
+            const baseURL = GiyaSession.get(GIYA_SESSION_KEYS.BASE_URL);
 
             if (!baseURL) {
                 toastr.error('Base URL not found. Please re-login.');
