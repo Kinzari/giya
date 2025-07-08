@@ -1,6 +1,6 @@
 let employeesTable;
 let currentEmployeeData = null;
-const baseApiUrl = sessionStorage.getItem('baseURL');
+const baseApiUrl = GiyaSession.get(GIYA_SESSION_KEYS.BASE_URL);
 
 $(document).ready(function() {
     initEmployeesTable();
@@ -221,7 +221,7 @@ function setupEventHandlers() {
 }
 
 function showEmployeeDetails(employeeId) {
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
 
     $.ajax({
         url: `${baseApiUrl}masterfile.php?action=get_employee`,
@@ -296,7 +296,7 @@ function showEmployeeDetails(employeeId) {
 }
 
 function editEmployee(employeeId) {
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
 
     $.ajax({
         url: `${baseApiUrl}masterfile.php?action=get_employee`,
@@ -361,7 +361,7 @@ function showAddEmployeeForm() {
 }
 
 function saveEmployee() {
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
     const formData = {
         mode: $('#employeeForm').data('mode') || 'add',
         id: $('#employeeForm').data('id'),
@@ -422,7 +422,7 @@ function deleteEmployee(employeeId) {
         confirmButtonText: 'Yes, delete it'
     }).then((result) => {
         if (result.isConfirmed) {
-            const userType = sessionStorage.getItem('user_typeId');
+            const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
 
             $.ajax({
                 url: `${baseApiUrl}masterfile.php?action=employee_delete`,
@@ -457,7 +457,7 @@ function deleteEmployee(employeeId) {
 }
 
 function toggleEmployeeStatus(employeeId, isActive) {
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
 
     $.ajax({
         url: `${baseApiUrl}masterfile.php?action=toggle_employee_status`,
@@ -485,7 +485,7 @@ function toggleEmployeeStatus(employeeId, isActive) {
 }
 
 function resetEmployeePassword(employeeId) {
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
 
     $.ajax({
         url: `${baseApiUrl}giya.php?action=reset_password`,
@@ -517,7 +517,7 @@ function resetEmployeePassword(employeeId) {
 }
 
 function loadDepartmentsDropdown(selectId, selectedId = null) {
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
 
     $.ajax({
         url: `${baseApiUrl}masterfile.php?action=departments`,
@@ -546,7 +546,7 @@ function loadDepartmentsDropdown(selectId, selectedId = null) {
 }
 
 function loadCampusDropdown(selectId, selectedId = null) {
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
 
     $.ajax({
         url: `${baseApiUrl}giya.php?action=get_campuses`,
