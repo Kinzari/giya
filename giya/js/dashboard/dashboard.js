@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function setupApiEndpoint() {
-    if (!sessionStorage.getItem('baseURL') && typeof getBaseURL !== 'function') {
+    if (!GiyaSession.get(GIYA_SESSION_KEYS.BASE_URL) && typeof getBaseURL !== 'function') {
         toastr.warning('API URL not found. You may need to login again.');
     }
 }
@@ -57,8 +57,8 @@ function initDateFields() {
  * @returns {Promise} - Axios promise
  */
 async function apiCall(endpoint, options = {}) {
-    // Use getBaseURL function if available
-    const baseURL = typeof getBaseURL === 'function' ? getBaseURL() : sessionStorage.getItem('baseURL');
+    // Use centralized base URL management
+    const baseURL = GiyaSession.get(GIYA_SESSION_KEYS.BASE_URL);
 
     if (!baseURL) {
         toastr.error('API URL not found. Please login again.');
@@ -73,23 +73,14 @@ async function apiCall(endpoint, options = {}) {
     // Add cache busting parameter
     params._t = new Date().getTime();
 
-    // Default config
+    // Default config with centralized headers
     const config = {
         params,
-        headers: options.headers || {}
-    };
-
-    // Add authentication headers if user info exists
-    const userInfo = sessionStorage.getItem('user');
-    if (userInfo) {
-        try {
-            const user = JSON.parse(userInfo);
-            config.headers['X-User-Type'] = user.user_typeId;
-            config.headers['X-User-Id'] = user.user_id;
-        } catch (e) {
-            // Silently continue if user info can't be parsed
+        headers: {
+            ...GiyaUtils.getApiHeaders(),
+            ...(options.headers || {})
         }
-    }
+    };
 
     return axios.get(url, config);
 }
@@ -120,25 +111,22 @@ async function loadDepartments() {
             });
 
             // For POC users, automatically select their department
-            const userInfo = sessionStorage.getItem('user');
-            if (userInfo) {
-                const user = JSON.parse(userInfo);
-                if (user.user_typeId == 5 && user.user_departmentId) {
-                    departmentSelect.value = user.user_departmentId;
-                    dashboardState.departmentId = user.user_departmentId;
+            const userData = GiyaSession.getUserData();
+            if (userData.user_id && userData.user_typeId == 5 && userData.user_departmentId) {
+                departmentSelect.value = userData.user_departmentId;
+                dashboardState.departmentId = userData.user_departmentId;
 
-                    // Disable changing department for POC users
-                    departmentSelect.disabled = true;
+                // Disable changing department for POC users
+                departmentSelect.disabled = true;
 
-                    // Add visual indicator
-                    const departmentContainer = document.getElementById('department-filter-container');
-                    if (departmentContainer) {
-                        departmentContainer.classList.add('poc-locked');
-                        const lockIcon = document.createElement('div');
-                        lockIcon.className = 'poc-lock-icon';
-                        lockIcon.innerHTML = '<i class="bi bi-lock-fill text-secondary ms-2"></i>';
-                        departmentSelect.parentNode.appendChild(lockIcon);
-                    }
+                // Add visual indicator
+                const departmentContainer = document.getElementById('department-filter-container');
+                if (departmentContainer) {
+                    departmentContainer.classList.add('poc-locked');
+                    const lockIcon = document.createElement('div');
+                    lockIcon.className = 'poc-lock-icon';
+                    lockIcon.innerHTML = '<i class="bi bi-lock-fill text-secondary ms-2"></i>';
+                    departmentSelect.parentNode.appendChild(lockIcon);
                 }
             }
         } else {
@@ -497,17 +485,14 @@ function setupFilterHandlers() {
  * Check if the user is a POC and apply restrictions
  */
 function checkPOCStatus() {
-    const userInfo = sessionStorage.getItem('user');
-    if (userInfo) {
-        const user = JSON.parse(userInfo);
-        if (user.user_typeId == 5 && user.user_departmentId) {
-            // Apply POC restrictions
-            dashboardState.departmentId = user.user_departmentId;
-            $('#department-filter').val(user.user_departmentId).prop('disabled', true);
-            $('#department-filter-container').addClass('poc-locked');
-            $('#department-filter-container').append('<div class="poc-lock-icon"><i class="bi bi-lock-fill text-secondary ms-2"></i></div>');
-            // Removed: loadCoursesByDepartment(user.user_departmentId);
-        }
+    const userData = GiyaSession.getUserData();
+    if (userData.user_id && userData.user_typeId == 5 && userData.user_departmentId) {
+        // Apply POC restrictions
+        dashboardState.departmentId = userData.user_departmentId;
+        $('#department-filter').val(userData.user_departmentId).prop('disabled', true);
+        $('#department-filter-container').addClass('poc-locked');
+        $('#department-filter-container').append('<div class="poc-lock-icon"><i class="bi bi-lock-fill text-secondary ms-2"></i></div>');
+        // Removed: loadCoursesByDepartment(userData.user_departmentId);
     }
 }
 
@@ -526,12 +511,9 @@ function setLoadingState(isLoading) {
         filterElements.prop('disabled', false);
 
         // Re-disable department filter for POC users if needed
-        const userInfo = sessionStorage.getItem('user');
-        if (userInfo) {
-            const user = JSON.parse(userInfo);
-            if (user.user_typeId == 5 && user.user_departmentId) {
-                $('#department-filter').prop('disabled', true);
-            }
+        const userData = GiyaSession.getUserData();
+        if (userData.user_id && userData.user_typeId == 5 && userData.user_departmentId) {
+            $('#department-filter').prop('disabled', true);
         }
     }
 }
