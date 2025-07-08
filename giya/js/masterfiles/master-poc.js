@@ -1,6 +1,6 @@
 let pocTable;
 let currentPocData = null;
-const baseApiUrl = sessionStorage.getItem('baseURL');
+const baseApiUrl = GiyaSession.get(GIYA_SESSION_KEYS.BASE_URL);
 
 $(document).ready(function() {
     initPocTable();
@@ -13,7 +13,7 @@ function initPocTable() {
             $('#pocTable').DataTable().destroy();
         }
 
-        const userType = sessionStorage.getItem('user_typeId');
+        const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
 
         pocTable = $('#pocTable').DataTable({
             ajax: {
@@ -251,7 +251,7 @@ function renderPocForm(data = null) {
 }
 
 function showPocDetails(pocId) {
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
 
     $.ajax({
         url: `${baseApiUrl}masterfile.php?action=get_poc`,
@@ -293,7 +293,7 @@ function showPocDetails(pocId) {
 }
 
 function editPoc(pocId) {
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
 
     $.ajax({
         url: `${baseApiUrl}masterfile.php?action=get_poc`,
@@ -342,7 +342,7 @@ function showAddPocForm() {
 }
 
 function savePoc() {
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
     const formData = {
         mode: $('#pocForm').data('mode') || 'add',
         id: $('#pocForm').data('id'),
@@ -395,7 +395,7 @@ function deletePoc(pocId) {
         confirmButtonText: 'Yes, delete it'
     }).then((result) => {
         if (result.isConfirmed) {
-            const userType = sessionStorage.getItem('user_typeId');
+            const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
 
             $.ajax({
                 url: `${baseApiUrl}masterfile.php?action=poc_delete`,
@@ -425,7 +425,7 @@ function deletePoc(pocId) {
 }
 
 function togglePocStatus(pocId, isActive) {
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
 
     $.ajax({
         url: `${baseApiUrl}masterfile.php?action=toggle_poc_status`,
@@ -453,7 +453,7 @@ function togglePocStatus(pocId, isActive) {
 }
 
 function resetPocPassword(pocId) {
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
 
     $.ajax({
         url: `${baseApiUrl}giya.php?action=reset_password`,
@@ -525,7 +525,7 @@ function validatePocForm() {
 }
 
 function loadDepartmentsDropdown(selectId, selectedId = null) {
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
 
     $.ajax({
         url: `${baseApiUrl}masterfile.php?action=departments`,
