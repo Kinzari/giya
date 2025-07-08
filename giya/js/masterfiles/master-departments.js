@@ -173,7 +173,7 @@ function createDepartmentDetailsModal() {
 
 function showDepartmentDetails(departmentId) {
     const baseUrl = getBaseURL();
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
 
     $.ajax({
         url: `${baseUrl}masterfile.php?action=get_department`,
@@ -211,7 +211,7 @@ function showDepartmentDetails(departmentId) {
 
 function editDepartment(departmentId) {
     const baseUrl = getBaseURL();
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
 
     $.ajax({
         url: `${baseUrl}masterfile.php?action=get_department`,
@@ -260,7 +260,7 @@ function deleteDepartment(departmentId) {
     }).then((result) => {
         if (result.isConfirmed) {
             const baseUrl = getBaseURL();
-            const userType = sessionStorage.getItem('user_typeId');
+            const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
 
             $.ajax({
                 url: `${baseUrl}masterfile.php?action=department_delete`,
@@ -291,7 +291,7 @@ function saveDepartment() {
     };
 
     const baseUrl = getBaseURL();
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
 
     $.ajax({
         url: `${baseUrl}masterfile.php?action=submit_department`,
@@ -341,5 +341,5 @@ function handleAjaxError(xhr, status, error) {
 }
 
 function getBaseURL() {
-    return sessionStorage.getItem('baseURL');
+    return GiyaSession.get(GIYA_SESSION_KEYS.BASE_URL);
 }
