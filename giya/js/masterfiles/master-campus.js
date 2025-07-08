@@ -1,6 +1,6 @@
 let campusesTable;
 let currentCampusData = null;
-const baseApiUrl = sessionStorage.getItem('baseURL');
+const baseApiUrl = GiyaSession.get(GIYA_SESSION_KEYS.BASE_URL);
 
 $(document).ready(function() {
     initCampusesTable();
@@ -13,7 +13,7 @@ function initCampusesTable() {
             $('#campusesTable').DataTable().destroy();
         }
 
-        const userType = sessionStorage.getItem('user_typeId');
+        const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
 
         campusesTable = $('#campusesTable').DataTable({
             ajax: {
@@ -157,7 +157,7 @@ function setupEventHandlers() {
 }
 
 function showCampusDetails(campusId) {
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
 
     $.ajax({
         url: `${baseApiUrl}masterfile.php?action=get_campus`,
@@ -203,7 +203,7 @@ function showCampusDetails(campusId) {
 }
 
 function editCampus(campusId) {
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
 
     $.ajax({
         url: `${baseApiUrl}masterfile.php?action=get_campus`,
@@ -252,7 +252,7 @@ function showAddCampusForm() {
 }
 
 function saveCampus() {
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
     const formData = {
         mode: $('#campusForm').data('mode') || 'add',
         id: $('#campusForm').data('id'),
@@ -300,7 +300,7 @@ function deleteCampus(campusId) {
         confirmButtonText: 'Yes, delete it'
     }).then((result) => {
         if (result.isConfirmed) {
-            const userType = sessionStorage.getItem('user_typeId');
+            const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
 
             $.ajax({
                 url: `${baseApiUrl}masterfile.php?action=campus_delete`,
