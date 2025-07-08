@@ -1,6 +1,6 @@
 let coursesTable;
 let currentCourseData = null;
-const baseUrl = sessionStorage.getItem('baseURL');
+const baseUrl = GiyaSession.get(GIYA_SESSION_KEYS.BASE_URL);
 
 $(document).ready(function() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -187,7 +187,7 @@ function createCourseDetailsModal() {
 }
 
 function showCourseDetails(courseId) {
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
 
     $.ajax({
         url: `${baseUrl}masterfile.php?action=get_course`,
@@ -224,7 +224,7 @@ function showCourseDetails(courseId) {
 }
 
 function editCourse(courseId) {
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
 
     $.ajax({
         url: `${baseUrl}masterfile.php?action=get_course`,
@@ -277,7 +277,7 @@ function deleteCourse(courseId) {
         cancelButtonText: 'Cancel'
     }).then((result) => {
         if (result.isConfirmed) {
-            const userType = sessionStorage.getItem('user_typeId');
+            const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
 
             $.ajax({
                 url: `${baseUrl}masterfile.php?action=course_delete`,
@@ -301,7 +301,7 @@ function deleteCourse(courseId) {
 }
 
 function saveCourse() {
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
     const formData = {
         courseName: $('#courseName').val(),
         departmentId: $('#department').val(),
@@ -364,7 +364,7 @@ function handleAjaxError(xhr, status, error) {
 }
 
 function loadDepartmentsDropdown(selectId, selectedId = null) {
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
 
     $.ajax({
         url: `${baseUrl}masterfile.php?action=departments`,
