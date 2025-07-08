@@ -53,9 +53,9 @@ function updateUserInfo() {
     const userTitle = document.querySelector('.user-title');
 
     if (userName) {
-        const firstName = sessionStorage.getItem('user_firstname');
-        const lastName = sessionStorage.getItem('user_lastname');
-        const userTypeId = sessionStorage.getItem('user_typeId');
+        const firstName = GiyaSession.get(GIYA_SESSION_KEYS.USER_FIRSTNAME);
+        const lastName = GiyaSession.get(GIYA_SESSION_KEYS.USER_LASTNAME);
+        const userTypeId = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
 
         if (firstName && lastName) {
             userName.textContent = `${firstName} ${lastName}`;
@@ -180,7 +180,7 @@ function setupSidebarToggle() {
 
 // Hide Master Files section for POC users (user_typeId === '5')
 function hideMasterFilesForPOC() {
-    const userTypeId = sessionStorage.getItem('user_typeId');
+    const userTypeId = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
 
     if (userTypeId === '5') {
         // Hide the Master Files dropdown and its menu
