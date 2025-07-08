@@ -1,6 +1,6 @@
 let studentsTable;
 let currentStudentData = null;
-const baseApiUrl = sessionStorage.getItem('baseURL');
+const baseApiUrl = GiyaSession.get(GIYA_SESSION_KEYS.BASE_URL);
 
 function handleAjaxError(xhr, status, error) {
     console.error('AJAX Error:', xhr, status, error);
@@ -22,7 +22,7 @@ function showSuccessMessage(message) {
 }
 
 function loadDepartmentsDropdown(selectId, selectedId = null) {
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
     $.ajax({
         url: `${baseApiUrl}masterfile.php?action=departments`,
         type: 'GET',
@@ -48,7 +48,7 @@ function loadDepartmentsDropdown(selectId, selectedId = null) {
 }
 
 function loadCoursesForDepartment(departmentId, selectId, selectedId = null) {
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
     $.ajax({
         url: `${baseApiUrl}masterfile.php?action=courses_by_department&department_id=${departmentId}`,
         type: 'GET',
@@ -72,7 +72,7 @@ function loadCoursesForDepartment(departmentId, selectId, selectedId = null) {
 }
 
 function loadCoursesDropdown(selectId, selectedId = null) {
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
     $.ajax({
         url: `${baseApiUrl}masterfile.php?action=courses`,
         type: 'GET',
@@ -96,7 +96,7 @@ function loadCoursesDropdown(selectId, selectedId = null) {
 }
 
 function loadCampusDropdown(selectId, selectedId = null) {
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
 
     $.ajax({
         url: `${baseApiUrl}giya.php?action=get_campuses`,
@@ -348,7 +348,7 @@ function setupActionButtonEvents() {
 }
 
 function showStudentDetails(studentId) {
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
     $.ajax({
         url: `${baseApiUrl}masterfile.php?action=get_student`,
         type: 'GET',
@@ -422,7 +422,7 @@ function showStudentForm(studentId = null) {
     $('#studentModalTitle').text(isEdit ? 'Edit Student' : 'Add New Student');
     $('#studentForm').empty();
     if (isEdit) {
-        const userType = sessionStorage.getItem('user_typeId');
+        const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
         $.ajax({
             url: `${baseApiUrl}masterfile.php?action=get_student`,
             type: 'GET',
@@ -558,7 +558,7 @@ function renderStudentForm(student = null) {
 }
 
 function toggleStudentStatus(studentId, isActive) {
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
     $.ajax({
         url: `${baseApiUrl}masterfile.php?action=toggle_student_status`,
         type: 'POST',
@@ -581,7 +581,7 @@ function toggleStudentStatus(studentId, isActive) {
 }
 
 function resetStudentPassword(studentId) {
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
     const requestData = { user_id: studentId };
     $.ajax({
         url: `${baseApiUrl}giya.php?action=reset_password`,
@@ -623,7 +623,7 @@ function deleteStudent(studentId) {
         cancelButtonText: 'Cancel'
     }).then((result) => {
         if (result.isConfirmed) {
-            const userType = sessionStorage.getItem('user_typeId');
+            const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
             $.ajax({
                 url: `${baseApiUrl}masterfile.php?action=student_delete`, // Fix: removed leading slash
                 type: 'POST',
@@ -648,7 +648,7 @@ function deleteStudent(studentId) {
 function saveStudent() {
     if (!validateStudentForm()) return;
 
-    const userType = sessionStorage.getItem('user_typeId');
+    const userType = GiyaSession.get(GIYA_SESSION_KEYS.USER_TYPE_ID);
     const studentId = $('#studentId').val();
     const data = {
         schoolId: $('#studentSchoolId').val(),
