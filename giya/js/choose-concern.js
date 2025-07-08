@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const baseURL = sessionStorage.getItem("baseURL");
+    const baseURL = GiyaSession.get(GIYA_SESSION_KEYS.BASE_URL);
     if (!baseURL) {
         window.location.href = 'index.html';
         return;
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function loadUserSubmissions() {
         try {
-            const userId = sessionStorage.getItem('user_id');
+            const userId = GiyaSession.get(GIYA_SESSION_KEYS.USER_ID);
             if (!userId) {
                 toastr.error('User ID not found. Please login again.');
                 return;
