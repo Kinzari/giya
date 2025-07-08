@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 05, 2025 at 10:47 AM
+-- Generation Time: Jul 07, 2025 at 05:42 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -330,7 +330,7 @@ CREATE TABLE `tbl_giya_posts` (
 --
 
 INSERT INTO `tbl_giya_posts` (`post_id`, `post_userId`, `post_departmentId`, `post_campusId`, `postType_id`, `post_date`, `post_time`, `post_title`, `post_message`, `post_stars`, `post_status`, `inquiry_typeId`, `is_forwarded`, `forwarded_by`, `forwarded_at`, `is_read_by_admin`) VALUES
-(1, 13, 4, 1, 2, '2025-02-25', '20:02:16', 'ENROLMENT PROCESS', 'How to Enroll?', 0, 1, 1, 1, 26, '2025-03-26 19:32:18', 0),
+(1, 13, 4, 1, 2, '2025-02-25', '20:02:16', 'ENROLMENT PROCESS', 'How to Enroll?', 0, 1, 1, 1, 26, '2025-03-26 19:32:18', 1),
 (2, 27, 1, 1, 1, '2025-02-25', '20:07:01', 'dsa', '321', 0, 2, 15, 0, NULL, NULL, 0),
 (4, 40, 1, 1, 1, '2025-02-26', '11:15:37', 'hk', 'Hk details', 0, 2, 6, 0, NULL, NULL, 0),
 (5, 27, 1, 1, 1, '2025-02-26', '14:55:49', 'FORM 137 CREDENTIALS', 'Can i have an info about th requirements for graduating student?', 0, 2, 3, 0, NULL, NULL, 0),
@@ -348,12 +348,13 @@ INSERT INTO `tbl_giya_posts` (`post_id`, `post_userId`, `post_departmentId`, `po
 (17, 45, 14, 1, 1, '2025-03-05', '09:32:11', 'csdl', 'csdl', 0, 2, 6, 0, NULL, NULL, 0),
 (18, 27, 1, 1, 3, '2025-03-05', '14:22:38', 'suggest', 'suggest', 0, 3, 2, 0, NULL, NULL, 0),
 (19, 27, 9, 3, 1, '2025-03-17', '13:26:17', 'iligan', 'iligan', 0, 3, 5, 1, 26, '2025-03-19 00:49:49', 0),
-(20, 30, 18, 1, 1, '2025-03-26', '21:56:38', 'IT_SERVICES', 'IT_SERVICES', 0, 1, 8, 0, NULL, NULL, 0),
+(20, 30, 18, 1, 1, '2025-03-26', '21:56:38', 'IT_SERVICES', 'IT_SERVICES', 0, 1, 8, 0, NULL, NULL, 1),
 (21, 30, 18, 1, 2, '2025-07-03', '13:50:22', 'ID', 'havent received my ID for 6 months', 0, 2, 8, 0, NULL, NULL, 0),
 (22, 27, 1, 1, 1, '2025-07-04', '12:37:39', '07-04 new subject', '07-04 new message', 0, 2, 16, 0, NULL, NULL, 0),
 (23, 27, 1, 1, 3, '2025-07-04', '13:13:10', 'test 07-04-2025 subject', 'test 07-04-2025 message', 0, 0, 16, 0, NULL, NULL, 0),
 (24, 27, 1, 1, 3, '2025-07-04', '13:14:05', 'suggestion subject', 'suggestion subject', 0, 0, 16, 0, NULL, NULL, 0),
-(25, 27, 12, 1, 1, '2025-07-04', '13:18:06', 'Finance Subject', 'Finance Message', 0, 1, 4, 1, 26, '2025-07-04 14:30:58', 0);
+(25, 27, 12, 1, 1, '2025-07-04', '13:18:06', 'Finance Subject', 'Finance Message', 0, 1, 4, 1, 26, '2025-07-04 14:30:58', 0),
+(26, 27, 14, 1, 1, '2025-07-05', '17:08:43', 'Test Bold Font Post', 'This post should appear bold in the dashboard', 0, 0, 2, 0, NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -503,7 +504,11 @@ INSERT INTO `tbl_giya_reply` (`reply_id`, `reply_userId`, `reply_postId`, `reply
 (145, 27, 22, '2025-07-04', '13:01:00', NULL, 'ty', 0, NULL),
 (146, 27, 18, '2025-07-04', '13:28:42', NULL, 'thanks', 0, NULL),
 (147, 27, 22, '2025-07-04', '13:44:37', NULL, 'already resolved', 0, NULL),
-(148, 25, 25, '2025-07-04', '14:30:58', NULL, 'Post forwarded to Registrar department at Carmen campus', 1, NULL);
+(148, 25, 25, '2025-07-04', '14:30:58', NULL, 'Post forwarded to Registrar department at Carmen campus', 1, NULL),
+(149, 30, 20, '2025-07-05', '16:49:23', NULL, 'test notif', 0, NULL),
+(150, 26, 20, '2025-07-05', '16:57:16', NULL, 'okay', 0, NULL),
+(151, 30, 20, '2025-07-05', '16:57:29', NULL, 'ty', 0, NULL),
+(152, 26, 20, '2025-07-05', '18:55:35', NULL, 'lol', 0, NULL);
 
 --
 -- Indexes for dumped tables
@@ -543,7 +548,8 @@ ALTER TABLE `tblusers`
   ADD KEY `idx_user_departmentId` (`user_departmentId`),
   ADD KEY `idx_user_typeId` (`user_typeId`),
   ADD KEY `fk_user_schoolyear` (`user_schoolyearId`),
-  ADD KEY `fk_user_campus` (`user_campusId`);
+  ADD KEY `fk_user_campus` (`user_campusId`),
+  ADD KEY `idx_user_type_dept` (`user_typeId`,`user_departmentId`);
 
 --
 -- Indexes for table `tblusertype`
@@ -574,7 +580,10 @@ ALTER TABLE `tbl_giya_posts`
   ADD KEY `inquiry_type_id` (`inquiry_typeId`),
   ADD KEY `fk_posts_department` (`post_departmentId`),
   ADD KEY `fk_post_campus` (`post_campusId`),
-  ADD KEY `fk_forwarded_by` (`forwarded_by`);
+  ADD KEY `fk_forwarded_by` (`forwarded_by`),
+  ADD KEY `idx_notification_status` (`post_status`,`is_read_by_admin`,`post_departmentId`),
+  ADD KEY `idx_post_date_time` (`post_date`,`post_time`),
+  ADD KEY `idx_forwarded_dept` (`is_forwarded`,`post_departmentId`);
 
 --
 -- Indexes for table `tbl_giya_posttype`
@@ -634,7 +643,7 @@ ALTER TABLE `tbl_giya_inquiry_types`
 -- AUTO_INCREMENT for table `tbl_giya_posts`
 --
 ALTER TABLE `tbl_giya_posts`
-  MODIFY `post_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `post_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `tbl_giya_posttype`
@@ -646,7 +655,7 @@ ALTER TABLE `tbl_giya_posttype`
 -- AUTO_INCREMENT for table `tbl_giya_reply`
 --
 ALTER TABLE `tbl_giya_reply`
-  MODIFY `reply_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=149;
+  MODIFY `reply_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=153;
 
 --
 -- Constraints for dumped tables
